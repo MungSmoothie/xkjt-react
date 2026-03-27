@@ -7,10 +7,10 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--primary:#8b2635;--bg:#faf8f3;--surface:#fff;--border:#e8e0d5;--text:#1a1a1a;--muted:#999}
-html,body{height:100%;margin:0}app{height:100vh;display:flex;overflow:hidden}
+html,body{height:100%;margin:0}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}
 a{text-decoration:none;color:inherit}
-app{display:flex}
+app{display:flex;height:100vh;overflow:hidden}
 sidebar{width:215px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
 .sidebar-header{padding:14px 16px;background:var(--primary);color:#fff;flex-shrink:0}
 .sidebar-header .logo{font-size:14px;font-weight:700}
@@ -54,7 +54,7 @@ td{padding:8px 10px;border-bottom:1px solid var(--border);color:#555}
 .quick-link:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .quick-link .icon{font-size:22px}
 .quick-link .txt{font-size:13px;font-weight:600}
-.container{max-width:860px;margin:0 auto}
+.container{max-width:860px;margin:0 auto;padding:24px 32px}
 .header{margin-bottom:24px}
 .header h1{font-size:22px;font-weight:700;color:var(--primary);margin-bottom:8px;padding-bottom:10px;border-bottom:2px solid var(--primary)}
 .subtitle{font-size:12px;color:#888}
@@ -104,7 +104,6 @@ function navigate(route) {
 function renderView() {
   var main = document.getElementById('appContent');
   var r = currentRoute;
-
   if (!r || r === '/') {
     renderHome(main);
   } else if (r.startsWith('report-')) {
@@ -123,8 +122,7 @@ function renderView() {
 function updateSidebar() {
   var r = currentRoute;
   document.querySelectorAll('.nav-item').forEach(function(el) {
-    var dr = el.getAttribute('data-route');
-    el.classList.toggle('active', dr === r);
+    el.classList.toggle('active', el.getAttribute('data-route') === r);
   });
 }
 
@@ -172,7 +170,6 @@ function renderReport(c, num) {
 
   var iframeStyles = '*{margin:0;padding:0;box-sizing:border-box}body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#faf8f3;padding:24px 32px}.container{max-width:860px;margin:0 auto;background:#fff;border:1px solid #e8e0d5;border-radius:10px;padding:24px 32px}.header{margin-bottom:24px}.header h1{font-size:22px;font-weight:700;color:#8b2635;margin-bottom:8px;padding-bottom:10px;border-bottom:2px solid #8b2635}.subtitle{font-size:12px;color:#888}.section{margin-bottom:24px}.section h2{font-size:16px;font-weight:700;color:#1a1a1a;margin:16px 0 10px}.section p{font-size:13px;color:#555;line-height:1.7;margin-bottom:8px}.section ul,.section ol{margin:8px 0 8px 20px;font-size:13px;color:#555}.section li{margin-bottom:4px}.section table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}.section th{text-align:left;background:#f5f3ef;padding:6px 10px;border:1px solid #e8e0d5;font-size:11px;color:#666}.section td{padding:6px 10px;border:1px solid #e8e0d5;color:#555;font-size:12px}.wrap{max-width:860px;margin:0 auto;padding:0 8px}.hdr{margin-bottom:24px}.hdr h1{font-size:22px;font-weight:700;color:#8b2635;margin-bottom:8px}.hdr .sub{font-size:12px;color:#888}.card{background:#fff;border:1px solid #e8e0d5;border-radius:10px;padding:20px;margin-bottom:20px}.card h2{font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:10px}.card p,.card ul{font-size:13px;color:#555;line-height:1.7}.card li{margin-bottom:4px}';
   var srcDoc = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + iframeStyles + '</style></head><body><div class="container">' + report.html + '</div></body></html>';
-  // Escape for HTML attribute
   srcDoc = srcDoc.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   c.innerHTML = '<div class="doc-header">' +
@@ -220,21 +217,9 @@ function buildSidebar() {
   }).join('');
 }
 
-  var r = currentRoute;
-    render();
-  updateSidebar();
-});
-  var r = currentRoute;
-    render();
-  updateSidebar();
-});
-// Read initial route from URL hash
-render();
+buildSidebar();
+renderView();
 updateSidebar();
 </script>
-</body>
-</html>
-</script>
-
 </body>
 </html>
