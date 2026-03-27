@@ -3,352 +3,1267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小动物科研培训平台 · 项目文档</title>
+<title>小动物科研培训平台 · 文档中心</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --primary: #8b2635;
-    --bg: #faf8f3;
-    --surface: #fff;
-    --border: #e8e0d5;
-    --text: #1a1a1a;
-    --muted: #999;
-    --header-h: 52px;
-  }
-  html, body { height: 100%; }
-  body {
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#8b2635;--bg:#faf8f3;--surface:#fff;--border:#e8e0d5;--text:#1a1a1a;--muted:#999;--header-h:52px}
+html,body{height:100%}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}
 
-  /* Header */
-  .site-header {
-    height: var(--header-h);
-    background: var(--primary);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    gap: 16px;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .site-header .logo {
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .site-header h1 {
-    font-size: 15px;
-    font-weight: 600;
-    flex: 1;
-  }
-  .site-header .badge {
-    font-size: 10px;
-    background: rgba(255,255,255,0.25);
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
+/* Header */
+.site-header{
+  height:var(--header-h);background:var(--primary);color:#fff;
+  display:flex;align-items:center;padding:0 20px;gap:16px;
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.site-header .logo{font-size:20px;flex-shrink:0}
+.site-header h1{font-size:15px;font-weight:600;flex:1}
+.site-header .badge{font-size:10px;background:rgba(255,255,255,.25);padding:2px 8px;border-radius:4px}
 
-  /* Main layout */
-  .main { display: flex; margin-top: var(--header-h); height: calc(100vh - var(--header-h)); }
+/* Main layout */
+.main{display:flex;margin-top:var(--header-h);height:calc(100vh - var(--header-h));overflow:hidden}
 
-  /* Sidebar tabs */
-  .sidebar {
-    width: 180px;
-    flex-shrink: 0;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
-    padding: 12px 0;
-  }
-  .sidebar-section { margin-bottom: 8px; }
-  .sidebar-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 6px 14px 3px;
-  }
-  .tab-btn {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 7px 14px;
-    font-size: 12.5px;
-    color: #555;
-    background: none;
-    border: none;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: all 0.12s;
-    font-family: inherit;
-  }
-  .tab-btn:hover { background: var(--bg); color: var(--text); }
-  .tab-btn.active {
-    background: #fdf5f5;
-    color: var(--primary);
-    border-left-color: var(--primary);
-    font-weight: 600;
-  }
+/* Sidebar */
+.sidebar{width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px 0}
+.sidebar-section{margin-bottom:8px}
+.sidebar-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:6px 14px 3px}
+.tab-btn{
+  display:block;width:100%;text-align:left;padding:7px 14px;
+  font-size:12.5px;color:#555;background:none;border:none;cursor:pointer;
+  border-left:3px solid transparent;transition:all .12s;font-family:inherit;
+}
+.tab-btn:hover{background:var(--bg);color:var(--text)}
+.tab-btn.active{background:#fdf5f5;color:var(--primary);border-left-color:var(--primary);font-weight:600}
 
-  /* Content */
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0;
-  }
-  .tab-content { display: none; padding: 0; }
-  .tab-content.active { display: block; }
+/* Content */
+.content{flex:1;overflow-y:auto;padding:0}
 
-  /* Overview */
-  .overview {
-    padding: 32px 36px;
-    max-width: 900px;
-  }
-  .overview h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--primary);
-    display: inline-block;
-  }
-  .overview h3 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin: 20px 0 10px;
-  }
-  .overview p {
-    font-size: 13.5px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 10px;
-  }
-  .overview .meta-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .overview .meta-item {
-    font-size: 11.5px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 4px 12px;
-    border-radius: 20px;
-    color: #666;
-  }
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin: 20px 0;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .stat-card .num { font-size: 24px; font-weight: 700; color: var(--primary); }
-  .stat-card .label { font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .conclusion-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-    margin: 16px 0;
-  }
-  .conclusion-table th {
-    text-align: left;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    padding: 7px 10px;
-    border-bottom: 2px solid var(--border);
-  }
-  .conclusion-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--border);
-    color: #555;
-  }
-  .phase-tag {
-    font-size: 10px;
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-weight: 600;
-  }
-  .phase-h { background: #fee2e2; color: #dc2626; }
-  .phase-m { background: #fef3c7; color: #d97706; }
-  .phase-l { background: #dcfce7; color: #16a34a; }
+/* Tab content */
+.tab-content{display:none;padding:0}
+.tab-content.active{display:block}
 
-  /* Report body */
-  .report-body {
-    padding: 24px 32px;
-    max-width: 860px;
-  }
-  .report-body .container { max-width: 100%; }
-  .report-body h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--primary);
-  }
-  .report-body h2 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    margin: 20px 0 10px;
-  }
-  .report-body h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    margin: 14px 0 8px;
-  }
-  .report-body p {
-    font-size: 13px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 8px;
-  }
-  .report-body table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    margin: 10px 0;
-  }
-  .report-body th {
-    text-align: left;
-    background: #f5f3ef;
-    padding: 6px 10px;
-    border: 1px solid var(--border);
-    font-size: 11px;
-    color: #666;
-  }
-  .report-body td {
-    padding: 6px 10px;
-    border: 1px solid var(--border);
-    color: #555;
-    font-size: 12px;
-  }
-  .report-body ul, .report-body ol {
-    margin: 8px 0 8px 20px;
-    font-size: 13px;
-    color: #555;
-  }
-  .report-body li { margin-bottom: 4px; }
-  .report-body strong { color: var(--text); font-weight: 600; }
-  .report-body .subtitle, .report-body .header .subtitle {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 16px;
-  }
+/* Overview */
+.overview{padding:32px 36px;max-width:900px}
+.overview h2{font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--primary);display:inline-block}
+.overview h3{font-size:15px;font-weight:700;color:var(--text);margin:20px 0 10px}
+.overview p{font-size:13px;color:#555;line-height:1.7;margin-bottom:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 12px;text-align:center}
+.stat .n{font-size:22px;font-weight:700;color:var(--primary)}
+.stat .l{font-size:11px;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:20px}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:7px 10px;border-bottom:2px solid var(--border)}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:#555}
+.tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px}
+.tag-h{background:#fee2e2;color:#dc2626}
+.tag-m{background:#fef3c7;color:#d97706}
+.tag-l{background:#dcfce7;color:#16a34a}
+.tech-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px}
+.tech-box p{font-size:13px;color:#555;line-height:2}
+.quick-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.quick-link{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:box-shadow .15s;font-size:13px;font-weight:600}
+.quick-link:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
 
-  @media (max-width: 768px) {
-    .sidebar { display: none; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .overview { padding: 20px 16px; }
-    .report-body { padding: 16px; }
-  }
+/* Report content */
+.report-body{padding:0}
+.report-body .container{max-width:860px;margin:0 auto;padding:24px 32px}
+.report-body h1{font-size:22px;font-weight:700;color:var(--primary);margin-bottom:8px;padding-bottom:10px;border-bottom:2px solid var(--primary)}
+.report-body .subtitle{font-size:12px;color:#888;margin-bottom:20px}
+.report-body h2{font-size:16px;font-weight:700;color:var(--text);margin:20px 0 10px}
+.report-body p{font-size:13px;color:#555;line-height:1.7;margin-bottom:8px}
+.report-body ul,.report-body ol{margin:8px 0 8px 20px;font-size:13px;color:#555}
+.report-body li{margin-bottom:4px}
+.report-body table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+.report-body th{text-align:left;background:#f5f3ef;padding:6px 10px;border:1px solid var(--border);font-size:11px;color:#666}
+.report-body td{padding:6px 10px;border:1px solid var(--border);color:#555;font-size:12px}
+
+/* iframe container */
+.iframe-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.iframe-wrap iframe{flex:1;width:100%;border:none;min-height:0}
+
+/* Doc header bar */
+.doc-header{padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.doc-header .icon{font-size:20px}
+.doc-header .title{font-size:14px;font-weight:600}
+.doc-back{margin-left:auto;font-size:12px;color:var(--primary);padding:4px 12px;border:1px solid var(--primary);border-radius:6px;cursor:pointer;background:none;font-family:inherit}
+.doc-back:hover{background:var(--primary);color:#fff}
 </style>
 </head>
 <body>
 
 <header class="site-header">
   <span class="logo">🐾</span>
-  <h1>小动物科研培训平台 · 项目文档中心</h1>
+  <h1>小动物科研培训平台 · 文档中心</h1>
   <span class="badge">村口情报社 · 2026.03</span>
 </header>
 
 <div class="main">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">📋 总览</div>
       <button class="tab-btn active" data-tab="overview" onclick="showTab('overview')">🏠 项目首页</button>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">📊 调研报告</div>
-        <button class="tab-btn" data-tab="report-1" onclick="showTab('report-1')">01 竞品分析</button>
-        <button class="tab-btn" data-tab="report-2" onclick="showTab('report-2')">02 用户画像</button>
-        <button class="tab-btn" data-tab="report-3" onclick="showTab('report-3')">03 课程内容</button>
-        <button class="tab-btn" data-tab="report-4" onclick="showTab('report-4')">04 设备码</button>
-        <button class="tab-btn" data-tab="report-5" onclick="showTab('report-5')">05 定价策略</button>
-        <button class="tab-btn" data-tab="report-6" onclick="showTab('report-6')">06 合规资质</button>
-        <button class="tab-btn" data-tab="report-7" onclick="showTab('report-7')">07 域名品牌</button>
-        <button class="tab-btn" data-tab="report-8" onclick="showTab('report-8')">08 推广获客</button>
-        <button class="tab-btn" data-tab="report-9" onclick="showTab('report-9')">09 支付接入</button>
-        <button class="tab-btn" data-tab="report-10" onclick="showTab('report-10')">10 运维保障</button>
-        <button class="tab-btn" data-tab="report-11" onclick="showTab('report-11')">11 团队协作</button>
-        <button class="tab-btn" data-tab="report-12" onclick="showTab('report-12')">12 直播功能</button>
+      <div class="sidebar-label">📁 核心文档</div>
+      <button class="tab-btn" data-tab="tree" onclick="showTab('tree')">🌳 功能树状图</button>
+      <button class="tab-btn" data-tab="prd" onclick="showTab('prd')">📋 PRD 文档</button>
+      <button class="tab-btn" data-tab="demo" onclick="showTab('demo')">🎨 Demo 原型</button>
     </div>
-  </aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">📊 调研报告</div>
+      <button class="tab-btn" data-tab="report-1" onclick="showTab('report-1')">01 竞品分析</button>
+      <button class="tab-btn" data-tab="report-2" onclick="showTab('report-2')">02 用户画像</button>
+      <button class="tab-btn" data-tab="report-3" onclick="showTab('report-3')">03 课程内容</button>
+      <button class="tab-btn" data-tab="report-4" onclick="showTab('report-4')">04 设备码</button>
+      <button class="tab-btn" data-tab="report-5" onclick="showTab('report-5')">05 定价策略</button>
+      <button class="tab-btn" data-tab="report-6" onclick="showTab('report-6')">06 合规资质</button>
+      <button class="tab-btn" data-tab="report-7" onclick="showTab('report-7')">07 域名品牌</button>
+      <button class="tab-btn" data-tab="report-8" onclick="showTab('report-8')">08 推广获客</button>
+      <button class="tab-btn" data-tab="report-9" onclick="showTab('report-9')">09 支付接入</button>
+      <button class="tab-btn" data-tab="report-10" onclick="showTab('report-10')">10 运维保障</button>
+      <button class="tab-btn" data-tab="report-11" onclick="showTab('report-11')">11 团队协作</button>
+      <button class="tab-btn" data-tab="report-12" onclick="showTab('report-12')">12 直播功能</button>
+    </div>
 
-  <!-- Content area -->
+  </aside>
   <div class="content">
-    <!-- Overview -->
+    <!-- Overview tab -->
     <div id="overview" class="tab-content active">
       <div class="overview">
         <h2>📋 小动物科研培训平台 · 项目概览</h2>
-
-        <p style="font-size:14px;color:#555;margin-bottom:20px">
-          垂直领域在线教育平台，为小动物（犬/猫/兔/鼠等）科研人员、兽医、工程师提供专业培训课程与直播服务。基于设备码实现权限管理，内容覆盖超声诊断、智能笼系统、医学影像等方向。
-        </p>
-
-        <div class="meta-row">
-          <span class="meta-item">📅 2026.03</span>
-          <span class="meta-item">⏱ 10-14 周开发</span>
-          <span class="meta-item">💰 ¥600-1000/月 云服务</span>
-          <span class="meta-item">👨‍💻 4人团队</span>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card"><div class="num">17</div><div class="label">份项目文件</div></div>
-          <div class="stat-card"><div class="num">2</div><div class="label">版 PRD</div></div>
-          <div class="stat-card"><div class="num">12</div><div class="label">份调研报告</div></div>
-          <div class="stat-card"><div class="num">7</div><div class="label">个开发阶段</div></div>
+        <p class="desc">垂直领域在线教育平台，为小动物（犬/猫/兔/鼠等）科研人员、兽医、工程师提供专业培训课程与直播服务。基于设备码实现权限管理，内容覆盖超声诊断、智能笼系统、医学影像等方向。</p>
+        <div class="stats">
+          <div class="stat"><div class="n">3</div><div class="l">核心文档</div></div>
+          <div class="stat"><div class="n">12</div><div class="l">调研报告</div></div>
+          <div class="stat"><div class="n">7</div><div class="l">开发阶段</div></div>
+          <div class="stat"><div class="n">¥600-1000</div><div class="l">云服务/月</div></div>
         </div>
 
         <h3>📌 核心结论</h3>
-        <table class="conclusion-table">
-          <thead><tr><th>维度</th><th>结论</th><th>优先级</th></tr></thead>
-          <tbody>
-            <tr><td>技术选型</td><td>网站版替代小程序（上线快、SEO可做、视频体验好）</td><td><span class="phase-tag phase-h">必须</span></td></tr>
-            <tr><td>护城河</td><td>设备码 US/IC/MX 三类型权限体系</td><td><span class="phase-tag phase-h">核心</span></td></tr>
-            <tr><td>最大风险</td><td>医疗合规（直播隐私+AI诊断）；视频防盗是持续投入</td><td><span class="phase-tag phase-h">⚠️高风险</span></td></tr>
-            <tr><td>AI 能力</td><td>Phase 5 暂不上（省 ¥2000-5000/月），仅预留接口</td><td><span class="phase-tag phase-l">暂缓</span></td></tr>
-            <tr><td>开发周期</td><td>4人并行 10 周；单人开发 16 周以上</td><td><span class="phase-tag phase-m">参考</span></td></tr>
-            <tr><td>启动成本</td><td>云服务 ¥600-1000/月；上线准备 ¥5,000-20,000</td><td><span class="phase-tag phase-m">参考</span></td></tr>
-          </tbody>
+        <table>
+          <tr><th>维度</th><th>结论</th><th>优先级</th></tr>
+          <tr><td style="font-weight:600">技术选型</td><td>网站版替代小程序（上线快、SEO可做、视频体验好）</td><td><span class="tag tag-h">必须</span></td></tr>
+          <tr><td style="font-weight:600">护城河</td><td>设备码 US/IC/MX 三类型权限体系</td><td><span class="tag tag-h">核心</span></td></tr>
+          <tr><td style="font-weight:600">最大风险</td><td>医疗合规（直播隐私+AI诊断）；视频防盗是持续投入</td><td><span class="tag tag-h">⚠️高风险</span></td></tr>
+          <tr><td style="font-weight:600">AI 能力</td><td>Phase 5 暂不上（省 ¥2000-5000/月），仅预留接口</td><td><span class="tag tag-l">暂缓</span></td></tr>
+          <tr><td style="font-weight:600">开发周期</td><td>4人并行 10 周；单人开发 16 周以上</td><td><span class="tag tag-m">参考</span></td></tr>
+          <tr><td style="font-weight:600">启动成本</td><td>云服务 ¥600-1000/月；上线准备 ¥5,000-20,000</td><td><span class="tag tag-m">参考</span></td></tr>
         </table>
 
         <h3>⚙️ 技术栈</h3>
-        <p>前端：Next.js 14 / Vue3 · 后端：NestJS / Go / MySQL / Redis</p>
-        <p>基础设施：腾讯云 VOD · CSS · COS · Cloudflare · Vercel</p>
-        <p>视频：Video.js / flv.js · AI：智谱 GLM-4 + QDrant</p>
+        <div class="tech-box">
+          <p>前端：Next.js 14 / Vue3 · 后端：NestJS / Go / MySQL / Redis</p>
+          <p>基础设施：腾讯云 VOD · COS · Cloudflare · Vercel</p>
+          <p>视频：Video.js / flv.js · AI：智谱 GLM-4 + QDrant</p>
+        </div>
 
-        <h3>🗂️ PRD 文档说明</h3>
-        <p>v4.0（网站版）为最新推荐方案，v2.0（小程序版）已废弃，仅保留参考。</p>
-        <p>功能树状图 v2 基于 PRD v4.0 整理，包含 11 个一级模块、Phase 1-7 开发阶段标注。</p>
+        <h3>🚀 快速入口</h3>
+        <div class="quick-links">
+          <button class="quick-link" onclick="showTab('prd')">📋 PRD v4.0 可行性分析</button>
+          <button class="quick-link" onclick="showTab('tree')">🌳 功能模块树状图</button>
+          <button class="quick-link" onclick="showTab('demo')">🎨 Demo 原型展示</button>
+          <button class="quick-link" onclick="showTab('report-6')">⚠️ 合规资质（最高风险）</button>
+        </div>
       </div>
     </div>
 
-        <div id="report-1" class="tab-content" style="display:none">
+    <!-- PRD tab -->
+    <div id="prd" class="tab-content">
+      <div class="doc-header">
+        <span class="icon">📋</span>
+        <span class="title">PRD v4.0 可行性分析</span>
+        <button class="doc-back" onclick="showTab('overview')">← 返回首页</button>
+      </div>
+      <div class="iframe-wrap">
+        <iframe src="PRD/小动物科研培训网站_PRD_v4.0_可行性分析_1---986d224b-fee5-4699-abf0-0bdf2f65c33e.pdf"></iframe>
+      </div>
+    </div>
+
+    <!-- Tree tab -->
+    <div id="tree" class="tab-content">
+      <div class="doc-header">
+        <span class="icon">🌳</span>
+        <span class="title">功能模块树状图 v2</span>
+        <button class="doc-back" onclick="showTab('overview')">← 返回首页</button>
+      </div>
+      <div class="iframe-wrap">
+        <iframe srcdoc="
+&lt;div class=&quot;container&quot;&gt;
+  &lt;div class=&quot;header&quot;&gt;
+    &lt;h1&gt;🐾 小动物科研培训网站&lt;/h1&gt;
+    &lt;p&gt;功能模块架构树状图 · PRD v2.0 可行性分析版&lt;/p&gt;
+    &lt;span class=&quot;tag&quot;&gt;网站版 · 设备码权限体系 · 直播+AI预留&lt;/span&gt;
+    &lt;div class=&quot;meta-bar&quot;&gt;
+      &lt;span class=&quot;meta-item&quot;&gt;📅 2026.03.26&lt;/span&gt;
+      &lt;span class=&quot;meta-item&quot;&gt;👨‍💻 村口情报社 · 二狗&lt;/span&gt;
+      &lt;span class=&quot;meta-item&quot;&gt;⏱ 开发周期 10-14 周&lt;/span&gt;
+      &lt;span class=&quot;meta-item&quot;&gt;💰 启动成本 ¥600-1000/月（不含人力）&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;tree&quot;&gt;
+    &lt;ul&gt;
+      &lt;!-- 一、用户与账户体系 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;一、用户与账户体系
+        &lt;span class=&quot;phase-tag phase-p1&quot;&gt;P1&lt;/span&gt;
+        &lt;span class=&quot;badge badge-core&quot;&gt;核心根基&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;1.1 角色与权限等级
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;游客（未登录）→ 只能看免费内容&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;普通用户（已登录，无设备）→ 免费 + 可付费购买单课&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;超声绑定用户 → 解锁超声全部付费课&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;智能笼绑定用户 → 解锁智能笼全部付费课&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;双设备用户 → 同时解锁超声 + 智能笼全部课程&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;1.2 注册流程
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;手机号 + 验证码（60秒防刷，5分钟有效）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;密码设置（6-20位，数字+字母）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;设备码输入 → 后台校验有效性 → 识别设备类型（US/IC/MX）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;设备码状态分支：未绑定/已绑定其他账号/已过期/解绑中&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;协议勾选（隐私政策+用户协议+医疗免责）&lt;/li&gt;
+              &lt;li class=&quot;l4&quot;&gt;推荐：微信扫码输入设备码，体验零门槛&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;1.3 登录流程
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;手机号 + 密码，或手机号 + 验证码&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;密码错误3次 → 图形验证码；连续5次 → 锁定30分钟&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;登录后合并所有已绑定设备类型 → 计算课程权限列表&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;记录设备指纹 → 异常IP多账号关联告警&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;1.4 账户功能
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;个人主页（头像/昵称/认证标识）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;学习档案（学习时长/课程进度/证书）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;消息中心（系统通知/课程更新/直播提醒）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;通知设置（邮件订阅/短信/推送偏好）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 二、设备码与权限管理 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;二、设备码与权限管理
+        &lt;span class=&quot;phase-tag phase-p1&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;badge badge-key&quot;&gt;核心护城河&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;2.1 设备码编码设计
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;格式：产品前缀(2位) + 批次号(4位) + 随机序列号(6位) + 校验位(1位)&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;示例：US-2026-384721-3 / IC-2026-XXXXXX-X / MX-2026-XXXXXX-X&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;校验位：前12位数字取模97，100减去余数（ISO 7064 MOD 97-10，防伪造）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;前缀：US=超声系列，IC=智能笼系列，MX=混合系列（同时解锁US+IC）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;2.2 多设备绑定规则
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;一账号可绑定多台不同类型设备，权限叠加&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;同一类型设备不可重复绑定（报错&quot;该类型设备已绑定&quot;）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;最多绑定 3 台设备（不论类型）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;2.3 解绑流程（必须审核）
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;用户申请 → 填写原因（设备损坏/换机/不再使用/其他）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;提交后设备码状态变为&quot;解绑中&quot;（此时不可用）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;后台管理员审核（查看原因 + 历史学习记录）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;拒绝 → 恢复设备绑定；通过 → 设备码恢复&quot;未绑定&quot;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;审核结果邮件/短信通知用户&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;2.4 权限矩阵
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;游客：免费科普/试听课/直播预告&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;普通用户：免费内容 + 💰 付费购买单课/专栏&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;超声绑定：超声全部付费课/直播/文档（无需额外购买）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;智能笼绑定：智能笼全部付费课/直播/文档（无需额外购买）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;AI智能问答：双设备用户均可用（设备码绑定后解锁）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 三、课程内容系统 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;三、课程内容系统
+        &lt;span class=&quot;phase-tag phase-p2&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;badge badge-core&quot;&gt;用户留存根本&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;3.1 课程管理
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;按学科分类：超声基础 / 超声临床（腹部/心超/妇产/小动物）/ 智能笼系统 / 影像诊断 / 设备维护&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;按级别：⭐入门（学生/新手工程师）/ ⭐⭐进阶（技师/住院医）/ ⭐⭐⭐高阶（主治/资深工程师）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;按形式：🎬视频课（主，占比60%）/ 📄图文课 / 🔴直播课 / 🎧音频课&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;课程单元结构：课程→章节→课时→知识点&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;课程上下架管理 / 批量导入&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;3.2 视频播放器（Video.js / DPlayer）
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;HLS/DASH 自适应码流（480p/720p/1080p）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;倍速播放（0.5x~2.0x）/ 断点续播 / 记忆播放位置&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;DRM 加密播放（防下载）&lt;span class=&quot;badge badge-risk&quot;&gt;防盗&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;跑马灯水印叠加（用户ID+时间戳，防录屏）&lt;span class=&quot;badge badge-risk&quot;&gt;防盗&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;每30秒进度保存 / 章节列表跳转 / 讲义PDF预览&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;章节答题解锁：每10分钟答对1道题才能继续，防打断连续录屏&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;3.3 视频防盗体系 &lt;span class=&quot;badge badge-risk&quot;&gt;高风险&lt;/span&gt;
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 1 — DRM加密：VOD HLS CMAF，浏览器端解密，源文件不可直接下载&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 2 — URL签名：CDN Key 签名，GET参数时效签名（默认1小时）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 3 — Referer黑名单：禁止常见视频网站嵌入&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 4 — 跑马灯水印：切片时嵌入动态水印&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 5 — 章节答题解锁：打断连续录屏&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Layer 6 — IP+UA限制：同一账号最多2设备同时播放&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;3.4 学习工具
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;收藏/历史记录&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;课程搜索（标题/标签/学科）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;文档全文搜索（PDF在线预览）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;学习路径（体系课完整路径 / 单课购买）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;学习计划（自定义周期目标）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 四、直播培训系统 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;四、直播培训系统
+        &lt;span class=&quot;phase-tag phase-p4&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;badge badge-key&quot;&gt;差异化竞争&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;4.1 直播类型
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;公开直播：免费观看，预约制，有回放（产品发布会/公开课/学术讲座）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;专业直播：设备码绑定用户专属，有回放（内部培训/高阶课程/实操演示）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;付费直播：单独购票，限时回放（专题研修班/认证课程）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;4.2 技术链路
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;讲师推流：OBS Studio / 腾讯云直播控制台（网页推流）→ RTMP over SSL&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;推流参数：1080p / 720p，30fps，2500-4000kbps，AAC-LC 128kbps&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;腾讯云 CSS：实时转码（多码率）/ 截图鉴黄 / 自动录制MP4 / 敏感词过滤&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;观众端：flv.js（推荐，延迟3-5秒）/ HLS.js（兼容性，5-10秒）/ DPlayer&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;自动降级：flv → hls → mp4（根据浏览器支持）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;4.3 直播功能清单
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播预约 → 开播前邮件/短信/Web Push提醒 &lt;span class=&quot;badge badge-core&quot;&gt;必须&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;实时观看 + 弹幕/聊天（WebSocket或腾讯云IM）&lt;span class=&quot;badge badge-core&quot;&gt;必须&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;禁言/踢人（管理员操作）&lt;span class=&quot;badge badge-core&quot;&gt;必须&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播回放自动生成（CSS→VOD）&lt;span class=&quot;badge badge-core&quot;&gt;必须&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;回放点播（复用点播播放器）&lt;span class=&quot;badge badge-core&quot;&gt;必须&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播答题（WebSocket广播题目→统计→结果）&lt;span class=&quot;badge badge-key&quot;&gt;重要&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播公告（跑马灯推送）&lt;span class=&quot;badge badge-key&quot;&gt;重要&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播数据统计（观看人数/峰值/时长/弹幕数）&lt;span class=&quot;badge badge-key&quot;&gt;重要&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;回放剪辑（云函数API触发）&lt;span class=&quot;badge badge-key&quot;&gt;重要&lt;/span&gt;&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;连麦互动（WebRTC/TRTC）&lt;span class=&quot;badge badge-ai&quot;&gt;可选&lt;/span&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;4.4 直播间页面结构
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;顶部：直播标题 · 讲师信息 · 状态（预告/直播中/已结束）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;左侧：视频播放器（flv.js）— 弹幕覆盖层 / 答题弹窗 / 跑马灯公告&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;右侧：弹幕列表 / 聊天输入框 / 预约按钮 / 观看人数热度&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;下方：课程简介 / 章节列表 / 相关推荐&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;4.5 直播合规要求 &lt;span class=&quot;badge badge-risk&quot;&gt;最高风险&lt;/span&gt;
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;直播前讲师须签《直播行为规范承诺书》&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;画面不得出现患者面部/病历信息/设备序列号（需遮挡）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;AI预审（截图+语音识别）后才可发布回放&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;管理员实时监播，发现违规立即中断推流&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;回放上线前人工审核确认&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 五、支付与会员系统 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;五、支付与会员系统
+        &lt;span class=&quot;phase-tag phase-p6&quot;&gt;&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;5.1 会员体系
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;免费会员：基础内容（免费科普/试听课/直播预告）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;月度/年度会员：畅学全站（按设备绑定走，不按会员）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;机构会员：团队管理/数据统计/批量账号&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;5.2 付费购买
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;单课购买 / 专栏购买（设备码绑定用户可跳过，直接看全课）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;微信支付 + 支付宝（0.6%手续费，T+1结算）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;课程优惠券 / 邀请码&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;订单管理 / 退款申请&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;发票申请（电子/纸质）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 六、AI智能问答（接口预留） --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;六、AI智能问答
+        &lt;span class=&quot;phase-tag phase-p5&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;badge badge-ai&quot;&gt;Phase 5 仅预留接口&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;6.1 RAG知识库问答（技术方案预留）
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;用户提问 → 语义理解（智谱GLM-4）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;→ 向量检索（QDrant）→ ANN检索 Top-5 chunks&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;→ 生成回答（智谱GLM-4）+ 引用来源&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;→ 展示回答 + 转人工兜底&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;6.2 知识库构建
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;PDF提取 → 语义分块（500字/chunk）→ embedding → QDrant&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;先做知识图谱再做RAG，持续优化Chunk策略&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;6.3 接口预留
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;GET /ai/chat — AI问答页面&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;POST /api/ai/ask — 提交问题，返回AI回答&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;GET /api/ai/history — 获取当前用户问答历史&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;GET/POST /api/ai/knowledge — 后台管理知识库内容&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;6.4 免责声明模板（必须显示）
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot; style=&quot;color:#c0392b;font-style:italic&quot;&gt;&quot;本回答仅供参考，不能替代专业医疗建议。如有具体诊疗需求，请咨询持牌兽医或医疗专业人员。&quot;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 七、个人中心 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;七、个人中心
+        &lt;span class=&quot;phase-tag phase-p6&quot;&gt;&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;我的课程（进度%/最后观看/在学/已学分类）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;收藏列表 / 下载管理（在线缓存，非离线）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;设备管理（绑定/解绑申请/常用设备标记）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;消息通知（邮件订阅/取消）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;密码修改 / 通知设置 / 实名认证（兽医资格证上传）&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 八、运营管理后台 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;八、运营管理后台
+        &lt;span class=&quot;phase-tag phase-p1&quot;&gt;&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.1 用户管理 — 用户列表/筛选/导出/账户封禁/认证资料审核&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.2 课程管理 — 课程上架审批/UGC内容审核/敏感词过滤&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.3 设备码管理 — 设备码生成/批次管理/状态查询/解绑审核&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.4 AI知识库管理 — 知识库内容增删改/向量更新&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.5 数据看板 — DAU/MAU/学习时长/课程转化漏斗/收入报表/机构学习报告&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.6 系统配置 — Banner/弹窗/推送通知/权限角色管理&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;8.7 直播管理 — 监播控制/中断推流/回放审核&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 九、SEO优化（网站特有） --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;九、SEO优化
+        &lt;span class=&quot;phase-tag phase-p7&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;badge badge-key&quot;&gt;网站特有优势&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;Next.js SSR — 每个课程页面独立URL，利于搜索引擎收录&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;课程TDK自定义（标题/描述/标签）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;sitemap.xml 生成 → 提交百度/Google&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;OG标签 → 微信/QQ分享卡片&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;百度搜索资源平台 + Google Search Console 接入&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;LCP &amp;lt; 2.5s 性能优化&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 十、合规与安全 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;十、合规与安全
+        &lt;span class=&quot;badge badge-risk&quot;&gt;最高优先级贯穿始终&lt;/span&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;10.1 医疗内容合规红线
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;❌ 直播出现患者隐私 → ✅ 全部打码或模拟设备教学&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;❌ AI给出诊断建议 → ✅ 加强免责，限制知识科普范围&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;❌ 未取得资质推广医疗器械 → ✅ 仅展示设备操作&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;❌ &quot;治愈率&quot;等绝对化表述 → ✅ 使用&quot;研究显示&quot;&quot;通常&quot;&quot;可能&quot;措辞&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;10.2 数据安全
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;全站HTTPS / 密码bcrypt哈希加盐 / 手机号AES-256加密&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;视频COS私有读+CDN鉴权+Referer限制&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;连续5次错误锁定30分钟 + 图形验证码 / 短信60秒防刷&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Access Token 2小时 / Refresh Token 7天&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;Cloudflare WAF（防CC/SQL注入/XSS）&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+
+      &lt;!-- 十一、第三方服务接入 --&gt;
+      &lt;li class=&quot;l1&quot;&gt;
+        &lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;十一、第三方服务接入
+        &lt;ul&gt;
+          &lt;li class=&quot;l2&quot;&gt;&lt;span class=&quot;toggle&quot;&gt;▼&lt;/span&gt;腾讯云全家桶（统一账号，有折扣）
+            &lt;ul&gt;
+              &lt;li class=&quot;l3&quot;&gt;VOD（点播视频存储+转码）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;CSS（直播推流服务）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;COS（对象存储）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;SMS（短信通知）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;CVM（云服务器）&lt;/li&gt;
+              &lt;li class=&quot;l3&quot;&gt;MySQL + Redis&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;微信支付 / 支付宝（0.6%手续费，需企业资质）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;Cloudflare（CDN + WAF + 免费SSL）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;智谱 GLM-4 + QDrant（AI RAG方案）&lt;/li&gt;
+          &lt;li class=&quot;l2&quot;&gt;Vercel（Next.js前端部署，免费）&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;legend&quot;&gt;
+    &lt;h3&gt;📌 开发优先级与阶段规划&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;P1（Phase 1-2）核心根基：&lt;/strong&gt;登录注册 + 设备码体系 → 视频点播播放（必须先跑通这两个，其他都是空中楼阁）&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;P2（Phase 3）体验加分：&lt;/strong&gt;搜索/收藏功能&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;P3（Phase 4）差异化：&lt;/strong&gt;直播功能（公开直播先上，专业直播后上）&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;P4（Phase 5）AI预留：&lt;/strong&gt;仅预留接口，不实际接入（省¥2000-5000/月）&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;P5（Phase 6-7）商业闭环：&lt;/strong&gt;支付接入 + 个人中心 + SEO上线&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;ul style=&quot;margin-top:10px&quot;&gt;
+      &lt;li&gt;&lt;strong&gt;总工期：&lt;/strong&gt;4人团队并行 → 10周；单人开发 → 16周以上&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;最低启动成本：&lt;/strong&gt;云服务 ¥600-1000/月（不含人力），上线前准备 ¥5,000-20,000&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;一句话结论：&lt;/strong&gt;合规是最大变量，设备码是护城河，直播+AI是差异化竞争力&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;footer&quot;&gt;
+    村口情报社 · 二狗出品 · 功能模块树状图 v2 · 2026年3月&lt;br&gt;
+    基于《可行性分析 PRD v2.0》生成
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  document.querySelectorAll('.toggle').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var li = this.parentElement;
+      li.classList.toggle('collapsed');
+      this.textContent = li.classList.contains('collapsed') ? '▶' : '▼';
+    });
+  });
+&lt;/script&gt;
+"></iframe>
+      </div>
+    </div>
+
+    <!-- Demo tab -->
+    <div id="demo" class="tab-content">
+      <div class="doc-header">
+        <span class="icon">🎨</span>
+        <span class="title">Demo 原型展示</span>
+        <button class="doc-back" onclick="showTab('overview')">← 返回首页</button>
+      </div>
+      <div class="iframe-wrap">
+        <iframe srcdoc="
+&lt;!-- 导航栏 --&gt;
+&lt;nav class=&quot;navbar&quot;&gt;
+  &lt;div class=&quot;nav-logo&quot; onclick=&quot;navigate('home')&quot;&gt;🐾 科研培训&lt;span&gt;平台&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;nav-links&quot;&gt;
+    &lt;button class=&quot;active&quot; onclick=&quot;navigate('home')&quot;&gt;首页&lt;/button&gt;
+    &lt;button onclick=&quot;navigate('courses')&quot;&gt;课程中心&lt;/button&gt;
+    &lt;button onclick=&quot;navigate('player')&quot;&gt;免费试听&lt;/button&gt;
+    &lt;button onclick=&quot;navigate('bind')&quot;&gt;设备绑定&lt;/button&gt;
+    &lt;button onclick=&quot;navigate('devices')&quot;&gt;我的设备&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;nav-actions&quot;&gt;
+    &lt;button class=&quot;btn btn-outline btn-sm&quot; id=&quot;authBtn&quot; onclick=&quot;navigate('auth')&quot;&gt;登录 / 注册&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;!-- 主视图容器 --&gt;
+&lt;div id=&quot;app&quot;&gt;
+
+  &lt;!-- ======= 首页 ======= --&gt;
+  &lt;div id=&quot;view-home&quot; class=&quot;view active&quot;&gt;
+    &lt;div class=&quot;hero&quot;&gt;
+      &lt;div class=&quot;hero-content container&quot;&gt;
+        &lt;h1&gt;小动物科研培训&lt;span&gt;平台&lt;/span&gt;&lt;/h1&gt;
+        &lt;p&gt;面向兽医、实验动物科研人员的一站式在线学习平台。设备绑定即可解锁对应课程，支持视频点播、直播培训、AI智能问答。&lt;/p&gt;
+        &lt;div class=&quot;hero-btns&quot;&gt;
+          &lt;button class=&quot;btn btn-accent&quot; onclick=&quot;navigate('courses')&quot;&gt;浏览课程&lt;/button&gt;
+          &lt;button class=&quot;btn&quot; style=&quot;background:rgba(255,255,255,0.15);color:#fff;border:2px solid rgba(255,255,255,0.4);&quot; onclick=&quot;navigate('bind')&quot;&gt;绑定设备码&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;hero-stats&quot;&gt;
+          &lt;div class=&quot;stat&quot;&gt;&lt;div class=&quot;stat-n&quot;&gt;200+&lt;/div&gt;&lt;div class=&quot;stat-l&quot;&gt;精品课程&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;stat&quot;&gt;&lt;div class=&quot;stat-n&quot;&gt;50+&lt;/div&gt;&lt;div class=&quot;stat-l&quot;&gt;授权专家&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;stat&quot;&gt;&lt;div class=&quot;stat-n&quot;&gt;5000+&lt;/div&gt;&lt;div class=&quot;stat-l&quot;&gt;注册学员&lt;/div&gt;&lt;/div&gt;
+          &lt;div class=&quot;stat&quot;&gt;&lt;div class=&quot;stat-n&quot;&gt;98%&lt;/div&gt;&lt;div class=&quot;stat-l&quot;&gt;好评率&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;features&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;section-title&quot;&gt;
+          &lt;h2&gt;为什么选择我们&lt;/h2&gt;
+          &lt;p&gt;专注小动物科研培训，解决实际问题&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;features-grid&quot;&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🔐&lt;/div&gt;
+            &lt;h3&gt;设备码授权体系&lt;/h3&gt;
+            &lt;p&gt;购买设备后凭设备码解锁对应课程，一个码只能绑定一个账号，杜绝共享。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🎥&lt;/div&gt;
+            &lt;h3&gt;高清视频点播&lt;/h3&gt;
+            &lt;p&gt;1080p高清课程，支持倍速播放、断点续播、章节跳转、离线缓存。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;📡&lt;/div&gt;
+            &lt;h3&gt;直播培训&lt;/h3&gt;
+            &lt;p&gt;专家在线直播答疑，支持弹幕互动、开播提醒、直播回放。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🧠&lt;/div&gt;
+            &lt;h3&gt;AI智能问答&lt;/h3&gt;
+            &lt;p&gt;基于专业语料库训练，7×24小时回答学习问题（Phase 5接入）。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🏥&lt;/div&gt;
+            &lt;h3&gt;专业内容&lt;/h3&gt;
+            &lt;p&gt;课程由三甲医院影像科专家、实验动物中心资深讲师录制。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;📱&lt;/div&gt;
+            &lt;h3&gt;多端学习&lt;/h3&gt;
+            &lt;p&gt;支持电脑、手机、平板随时学习，学习进度自动同步。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 精选课程预览 --&gt;
+    &lt;div class=&quot;course-section&quot; style=&quot;background: var(--bg);&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;section-title&quot;&gt;
+          &lt;h2&gt;精选课程&lt;/h2&gt;
+          &lt;p&gt;绑定设备码，解锁全部对应类型课程&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;course-grid&quot; id=&quot;featured-courses&quot;&gt;&lt;/div&gt;
+        &lt;div style=&quot;text-align:center; margin-top:24px;&quot;&gt;
+          &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;navigate('courses')&quot;&gt;查看全部课程 →&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 设备码介绍 --&gt;
+    &lt;div class=&quot;features&quot; style=&quot;background: var(--surface);&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;section-title&quot;&gt;
+          &lt;h2&gt;设备码如何工作&lt;/h2&gt;
+          &lt;p&gt;购买设备后，设备码是您解锁课程的唯一凭证&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;features-grid&quot;&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🔍&lt;/div&gt;
+            &lt;h3&gt;找到设备码&lt;/h3&gt;
+            &lt;p&gt;设备码在设备说明书内，或联系经销商获取。格式：US-XXXX-YYYY 或 IC-XXXX-YYYY&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;📲&lt;/div&gt;
+            &lt;h3&gt;注册并绑定&lt;/h3&gt;
+            &lt;p&gt;在平台上注册账号，进入&quot;设备绑定&quot;页面，输入设备码，一键绑定。&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;feature-card&quot;&gt;
+            &lt;div class=&quot;feature-icon&quot;&gt;🎓&lt;/div&gt;
+            &lt;h3&gt;解锁全部课程&lt;/h3&gt;
+            &lt;p&gt;绑定成功后，该设备类型对应的全部付费课程自动解锁，无二次收费。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ======= 课程中心 ======= --&gt;
+  &lt;div id=&quot;view-courses&quot; class=&quot;view&quot;&gt;
+    &lt;div class=&quot;course-section&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;section-title&quot; style=&quot;text-align:left; margin-bottom:8px;&quot;&gt;
+          &lt;h2&gt;课程中心&lt;/h2&gt;
+          &lt;p id=&quot;course-count&quot;&gt;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;user-bar-container&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;filter-bar&quot;&gt;
+          &lt;button class=&quot;filter-btn active&quot; onclick=&quot;filterCourses('all', this)&quot;&gt;全部&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; onclick=&quot;filterCourses('ultrasound', this)&quot;&gt;超声影像&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; onclick=&quot;filterCourses('smartcage', this)&quot;&gt;智能笼&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; onclick=&quot;filterCourses('free', this)&quot;&gt;免费试听&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;course-grid&quot; id=&quot;course-list&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ======= 设备绑定 ======= --&gt;
+  &lt;div id=&quot;view-bind&quot; class=&quot;view&quot;&gt;
+    &lt;div class=&quot;bind-section&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;bind-container&quot;&gt;
+          &lt;div class=&quot;bind-box&quot;&gt;
+            &lt;h2&gt;🔐 绑定设备码&lt;/h2&gt;
+            &lt;p class=&quot;sub&quot;&gt;购买设备后，输入设备码解锁对应课程&lt;/p&gt;
+            &lt;div class=&quot;form-group&quot;&gt;
+              &lt;label&gt;选择设备类型（选填，方便演示）&lt;/label&gt;
+              &lt;div class=&quot;code-prefix-help&quot;&gt;
+                &lt;span class=&quot;prefix-chip&quot; onclick=&quot;fillPrefix('US', this)&quot;&gt;US — 超声影像设备&lt;/span&gt;
+                &lt;span class=&quot;prefix-chip&quot; onclick=&quot;fillPrefix('IC', this)&quot;&gt;IC — 智能笼设备&lt;/span&gt;
+                &lt;span class=&quot;prefix-chip&quot; onclick=&quot;fillPrefix('MX', this)&quot;&gt;MX — 混合设备（双解锁）&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;form-group&quot;&gt;
+              &lt;label&gt;设备码 *&lt;/label&gt;
+              &lt;input type=&quot;text&quot; class=&quot;form-input&quot; id=&quot;codeInput&quot; placeholder=&quot;US-XXXX-XXXX&quot; maxlength=&quot;15&quot; oninput=&quot;onCodeInput()&quot;&gt;
+              &lt;p class=&quot;form-hint&quot;&gt;格式：前缀-4位字母-4位数字，如 US-ABCD-1234&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;button class=&quot;btn btn-primary&quot; style=&quot;width:100%;padding:14px;&quot; onclick=&quot;submitBind()&quot;&gt;立即绑定&lt;/button&gt;
+            &lt;div id=&quot;bindResult&quot; class=&quot;bind-result&quot;&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;margin-top:20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px;&quot;&gt;
+            &lt;h4 style=&quot;margin-bottom:10px;&quot;&gt;📋 设备码类型说明&lt;/h4&gt;
+            &lt;table style=&quot;font-size:13px;&quot;&gt;
+              &lt;tr&gt;&lt;td style=&quot;font-weight:700;color:var(--primary);padding-right:16px;&quot;&gt;US-前缀&lt;/td&gt;&lt;td&gt;超声影像设备 → 解锁全部超声类课程&lt;/td&gt;&lt;/tr&gt;
+              &lt;tr&gt;&lt;td style=&quot;font-weight:700;color:#27ae60;padding-right:16px;&quot;&gt;IC-前缀&lt;/td&gt;&lt;td&gt;智能笼设备 → 解锁全部智能笼类课程&lt;/td&gt;&lt;/tr&gt;
+              &lt;tr&gt;&lt;td style=&quot;font-weight:700;color:#9b59b6;padding-right:16px;&quot;&gt;MX-前缀&lt;/td&gt;&lt;td&gt;混合设备 → 同时解锁超声+智能笼全部课程&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;
+            &lt;p style=&quot;font-size:12px;color:var(--text-secondary);margin-top:10px;&quot;&gt;⚠️ 设备码只能绑定一个账号，每个账号可绑定最多3个设备码&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ======= 我的设备 ======= --&gt;
+  &lt;div id=&quot;view-devices&quot; class=&quot;view&quot;&gt;
+    &lt;div class=&quot;devices-section&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div id=&quot;user-bar-container2&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;devices-header&quot;&gt;
+          &lt;h2&gt;📱 我的设备&lt;/h2&gt;
+          &lt;button class=&quot;btn btn-accent btn-sm&quot; onclick=&quot;navigate('bind')&quot;&gt;+ 绑定新设备&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;deviceList&quot;&gt;&lt;/div&gt;
+        &lt;div id=&quot;noDevices&quot; style=&quot;text-align:center;padding:60px 0;color:var(--text-secondary);&quot;&gt;
+          &lt;div style=&quot;font-size:48px;margin-bottom:16px;&quot;&gt;📦&lt;/div&gt;
+          &lt;p style=&quot;font-size:16px;font-weight:600;margin-bottom:8px;&quot;&gt;还没有绑定任何设备&lt;/p&gt;
+          &lt;p style=&quot;font-size:13px;&quot;&gt;购买设备后，凭设备码在此绑定，即可解锁对应课程&lt;/p&gt;
+          &lt;button class=&quot;btn btn-primary&quot; style=&quot;margin-top:20px;&quot; onclick=&quot;navigate('bind')&quot;&gt;去绑定设备码&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ======= 视频播放器 ======= --&gt;
+  &lt;div id=&quot;view-player&quot; class=&quot;view&quot;&gt;
+    &lt;div class=&quot;player-section&quot;&gt;
+      &lt;div class=&quot;container&quot;&gt;
+        &lt;div id=&quot;        &lt;div id=&quot;user-bar-container3&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;player-container&quot; id=&quot;playerContainer&quot;&gt;
+          &lt;video id=&quot;mainVideo&quot; style=&quot;display:none;&quot; ontimeupdate=&quot;onTimeUpdate()&quot;&gt;&lt;/video&gt;
+          &lt;div class=&quot;player-overlay&quot; id=&quot;playerOverlay&quot; onclick=&quot;togglePlay()&quot;&gt;
+            &lt;div class=&quot;big-play&quot;&gt;▶&lt;/div&gt;
+            &lt;h3 id=&quot;playerTitle&quot;&gt;小鼠影像学检查技术&lt;/h3&gt;
+            &lt;p id=&quot;playerSub&quot;&gt;免费试听 · 时长 12:34&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;player-bar&quot; id=&quot;playerBar&quot; style=&quot;display:none;&quot;&gt;
+          &lt;div class=&quot;pb-progress&quot;&gt;&lt;div class=&quot;pb-progress-fill&quot; id=&quot;pbFill&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+          &lt;span class=&quot;pb-time&quot; id=&quot;pbTime&quot;&gt;00:00 / 12:34&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;player-chapters&quot; id=&quot;chapters&quot;&gt;
+          &lt;div class=&quot;chapter-item playing&quot; onclick=&quot;selectChapter(0)&quot;&gt;
+            &lt;div class=&quot;chapter-n&quot;&gt;1&lt;/div&gt;
+            &lt;div class=&quot;chapter-title&quot;&gt;第一章：实验小鼠概述与分类&lt;/div&gt;
+            &lt;div class=&quot;chapter-dur&quot;&gt;12:34&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;chapter-item&quot; onclick=&quot;selectChapter(1)&quot;&gt;
+            &lt;div class=&quot;chapter-n&quot;&gt;2&lt;/div&gt;
+            &lt;div class=&quot;chapter-title&quot;&gt;第二章：影像学检查基础原理&lt;/div&gt;
+            &lt;div class=&quot;chapter-dur&quot;&gt;18:22&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;chapter-item&quot; onclick=&quot;selectChapter(2)&quot;&gt;
+            &lt;div class=&quot;chapter-n&quot;&gt;3&lt;/div&gt;
+            &lt;div class=&quot;chapter-title&quot;&gt;第三章：超声设备操作演示&lt;/div&gt;
+            &lt;div class=&quot;chapter-dur&quot;&gt;24:15&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;chapter-item&quot; onclick=&quot;selectChapter(3)&quot;&gt;
+            &lt;div class=&quot;chapter-n&quot;&gt;4&lt;/div&gt;
+            &lt;div class=&quot;chapter-title&quot;&gt;第四章：实拍案例分析&lt;/div&gt;
+            &lt;div class=&quot;chapter-dur&quot;&gt;31:08&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;chapter-item&quot; onclick=&quot;selectChapter(4)&quot;&gt;
+            &lt;div class=&quot;chapter-n&quot;&gt;5&lt;/div&gt;
+            &lt;div class=&quot;chapter-title&quot;&gt;第五章：常见问题与解决方案&lt;/div&gt;
+            &lt;div class=&quot;chapter-dur&quot;&gt;15:47&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;playerAccessDenied&quot; style=&quot;display:none; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:40px; text-align:center; margin-top:20px;&quot;&gt;
+          &lt;div style=&quot;font-size:48px;margin-bottom:16px;&quot;&gt;🔒&lt;/div&gt;
+          &lt;h3 style=&quot;font-size:18px;margin-bottom:8px;&quot;&gt;此课程为付费内容&lt;/h3&gt;
+          &lt;p style=&quot;color:var(--text-secondary);font-size:14px;margin-bottom:20px;&quot;&gt;绑定对应设备码后可解锁全部章节&lt;/p&gt;
+          &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;navigate('bind')&quot;&gt;去绑定设备码&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ======= 登录注册 ======= --&gt;
+  &lt;div id=&quot;view-auth&quot; class=&quot;view&quot;&gt;
+    &lt;div class=&quot;auth-section&quot;&gt;
+      &lt;div class=&quot;auth-box&quot;&gt;
+        &lt;h2 id=&quot;authTitle&quot;&gt;欢迎回来&lt;/h2&gt;
+        &lt;p class=&quot;sub&quot; id=&quot;authSub&quot;&gt;登录后享受完整学习体验&lt;/p&gt;
+        &lt;div class=&quot;auth-tabs&quot;&gt;
+          &lt;button class=&quot;auth-tab active&quot; id=&quot;tabLogin&quot; onclick=&quot;switchAuthTab('login')&quot;&gt;登录&lt;/button&gt;
+          &lt;button class=&quot;auth-tab&quot; id=&quot;tabRegister&quot; onclick=&quot;switchAuthTab('register')&quot;&gt;注册&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;form class=&quot;auth-form&quot; onsubmit=&quot;return handleAuth(event)&quot;&gt;
+          &lt;input type=&quot;text&quot; id=&quot;authName&quot; placeholder=&quot;请输入姓名&quot; style=&quot;display:none;&quot;&gt;
+          &lt;input type=&quot;text&quot; id=&quot;authPhone&quot; placeholder=&quot;手机号&quot;&gt;
+          &lt;input type=&quot;password&quot; id=&quot;authPwd&quot; placeholder=&quot;密码&quot;&gt;
+          &lt;div id=&quot;deviceCodeField&quot; style=&quot;display:none; position:relative;&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;authCode&quot; placeholder=&quot;设备码（选填，已绑定设备码可自动解锁课程）&quot; style=&quot;padding-right:16px;&quot;&gt;
+          &lt;/div&gt;
+          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; style=&quot;width:100%;padding:14px;&quot; id=&quot;authSubmitBtn&quot;&gt;登录&lt;/button&gt;
+        &lt;/form&gt;
+        &lt;p class=&quot;auth-divider&quot;&gt;其他登录方式&lt;/p&gt;
+        &lt;button class=&quot;btn btn-outline&quot; style=&quot;width:100%;&quot; onclick=&quot;wechatLogin()&quot;&gt;微信登录（暂未开放）&lt;/button&gt;
+        &lt;p style=&quot;font-size:12px;color:var(--text-secondary);text-align:center;margin-top:14px;&quot;&gt;演示说明：任意手机号+密码即可登录，设备码可选填&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;!-- Toast 提示 --&gt;
+&lt;div class=&quot;toast&quot; id=&quot;toast&quot;&gt;&lt;/div&gt;
+
+&lt;!-- Footer --&gt;
+&lt;div class=&quot;footer&quot;&gt;
+  &lt;p&gt;© 2026 小动物科研培训平台 · 村口情报社出品&lt;/p&gt;
+  &lt;p&gt;Powered by 腾讯云 VOD · CDN · AI 智谱 GLM-4&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+// ==================== 数据 ====================
+const COURSES = [
+  { id: 'c01', title: '小鼠影像学检查技术：从入门到精通', type: 'ultrasound', teacher: '张明远 主任医师', lessons: 42, hours: '12.5h', thumb: '🔬', free: true, locked: false, desc: '小鼠超声影像基础理论+实操演示' },
+  { id: 'c02', title: '实验动物麻醉与镇痛管理', type: 'smartcage', teacher: '李芳 实验动物中心', lessons: 28, hours: '8.2h', thumb: '💉', free: true, locked: false, desc: '规范化麻醉流程与疼痛评估' },
+  { id: 'c03', title: '智能笼系统操作与数据解读', type: 'smartcage', teacher: '王海 工程师', lessons: 18, hours: '5.5h', thumb: '🏠', free: false, locked: true, desc: '从安装到数据导出的全流程指南' },
+  { id: 'c04', title: '超声弹性成像在肝脏纤维化评估中的应用', type: 'ultrasound', teacher: '赵东升 主治医师', lessons: 36, hours: '10.8h', thumb: '🫀', free: false, locked: true, desc: '前沿影像技术在科研中的应用' },
+  { id: 'c05', title: '小动物CT/MRI影像学高级教程', type: 'ultrasound', teacher: '孙丽 影像科主任', lessons: 52, hours: '16.0h', thumb: '🧠', free: false, locked: true, desc: 'CT/MRI成像原理与临床读片' },
+  { id: 'c06', title: '智能笼实时监测系统搭建', type: 'smartcage', teacher: '王海 工程师', lessons: 24, hours: '7.0h', thumb: '📊', free: false, locked: true, desc: '传感器配置+数据上传+异常预警' },
+  { id: 'c07', title: '超声造影技术（CEUS）实验方法', type: 'ultrasound', teacher: '张明远 主任医师', lessons: 20, hours: '6.2h', thumb: '🩺', free: false, locked: true, desc: '造影剂配制与成像操作规范' },
+  { id: 'c08', title: '实验动物福利伦理与规范', type: 'free', teacher: '陈蓉 伦理委员会', lessons: 15, hours: '4.5h', thumb: '⚖️', free: true, locked: false, desc: 'GLP规范与动物福利要求（免费）' },
+  { id: 'c09', title: '智能笼温湿度与气体监测数据分析', type: 'smartcage', teacher: '李芳 实验动物中心', lessons: 30, hours: '9.0h', thumb: '🌡️', free: false, locked: true, desc: '环境数据挖掘与异常检测' },
+];
+
+const DEVICE_TYPES = {
+  US: { label: '超声影像设备', color: '#667eea', courses: ['c01','c04','c05','c07'] },
+  IC: { label: '智能笼设备', color: '#11998e', courses: ['c02','c03','c06','c09'] },
+  MX: { label: '混合设备', color: '#f093fb', courses: ['c01','c02','c03','c04','c05','c06','c07','c09'] },
+};
+
+// ==================== 状态 ====================
+let currentUser = null;
+let userDevices = [];
+let currentFilter = 'all';
+let isPlaying = false;
+
+// ==================== 导航 ====================
+function navigate(view) {
+  document.querySelectorAll('.view').forEach(v =&gt; v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b =&gt; b.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.nav-links button');
+  if (view === 'home') navBtns[0].classList.add('active');
+  if (view === 'courses') navBtns[1].classList.add('active');
+  if (view === 'player') navBtns[2].classList.add('active');
+  if (view === 'bind') navBtns[3].classList.add('active');
+  if (view === 'devices') navBtns[4].classList.add('active');
+
+  // 更新Auth按钮
+  const authBtn = document.getElementById('authBtn');
+  if (currentUser) {
+    authBtn.textContent = currentUser.name;
+    authBtn.onclick = showUserMenu;
+  } else {
+    authBtn.textContent = '登录 / 注册';
+    authBtn.onclick = () =&gt; navigate('auth');
+  }
+
+  if (view === 'courses') renderCourses();
+  if (view === 'bind') resetBindForm();
+  if (view === 'devices') renderDevices();
+  if (view === 'player') renderPlayer();
+  if (view === 'home') renderFeatured();
+  window.scrollTo(0, 0);
+}
+
+function showUserMenu() {
+  const ok = confirm('确定要退出登录吗？');
+  if (ok) { currentUser = null; userDevices = []; navigate('home'); toast('已退出登录', 'info'); }
+}
+
+// ==================== Toast ====================
+function toast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() =&gt; t.classList.remove('show'), 3000);
+}
+
+// ==================== 课程渲染 ====================
+function canAccess(course) {
+  if (!course.locked) return true;
+  if (!currentUser || userDevices.length === 0) return false;
+  const allCodes = userDevices.map(d =&gt; d.type);
+  if (allCodes.includes('MX')) return true;
+  return allCodes.includes(course.type === 'ultrasound' ? 'US' : 'IC');
+}
+
+function renderUserBar() {
+  const html = currentUser ? `
+    &lt;div class=&quot;user-bar&quot;&gt;
+      &lt;div class=&quot;user-avatar&quot;&gt;${currentUser.name[0]}&lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;user-name&quot;&gt;${currentUser.name}&lt;/div&gt;
+        &lt;div class=&quot;user-role&quot;&gt;${userDevices.length &gt; 0 ? '已绑定 ' + userDevices.length + ' 台设备' : '游客（可浏览免费内容）'}&lt;/div&gt;
+      &lt;/div&gt;
+      ${userDevices.length &gt; 0 ? `&lt;div class=&quot;user-codes&quot;&gt;${userDevices.map(d =&gt; `&lt;span class=&quot;code-badge&quot;&gt;${d.code}&lt;/span&gt;`).join('')}&lt;/div&gt;` : ''}
+    &lt;/div&gt;` : '';
+  ['user-bar-container','user-bar-container2','user-bar-container3'].forEach(id =&gt; {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+}
+
+function makeCourseCard(c) {
+  const accessible = canAccess(c);
+  const lockIcon = c.locked &amp;&amp; !accessible ? ' 🔒' : '';
+  const tagClass = c.free ? 'free' : (c.locked &amp;&amp; !accessible ? 'locked' : '');
+  const tagText = c.free ? '免费' : (c.locked &amp;&amp; !accessible ? '付费' : '已解锁');
+  const priceHtml = c.free ? '&lt;span class=&quot;price free&quot;&gt;免费&lt;span style=&quot;font-size:12px;font-weight:400;color:#aaa;margin-left:4px;text-decoration:none;&quot;&gt; · 已开放&lt;/span&gt;&lt;/span&gt;' : (accessible ? '&lt;span class=&quot;price free&quot;&gt;已解锁&lt;/span&gt;' : `&lt;span class=&quot;price&quot;&gt;¥${(Math.random()*200+200).toFixed(0)}&lt;small&gt;¥${(Math.random()*100+300).toFixed(0)}&lt;/small&gt;&lt;/span&gt;`);
+  return `
+    &lt;div class=&quot;course-card&quot; onclick=&quot;onCourseClick('${c.id}')&quot;&gt;
+      &lt;div class=&quot;course-thumb&quot;&gt;
+        &lt;div style=&quot;font-size:56px;&quot;&gt;${c.thumb}&lt;/div&gt;
+        ${tagClass ? `&lt;span class=&quot;course-tag ${tagClass}&quot;&gt;${tagText}&lt;/span&gt;` : ''}
+        &lt;div class=&quot;play-btn&quot; onclick=&quot;event.stopPropagation(); playCourse('${c.id}')&quot;&gt;▶&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;course-info&quot;&gt;
+        &lt;h3&gt;${c.title}${lockIcon}&lt;/h3&gt;
+        &lt;div class=&quot;course-meta&quot;&gt;
+          &lt;span&gt;👤 ${c.teacher}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;course-meta&quot;&gt;
+          &lt;span&gt;📚 ${c.lessons}节&lt;/span&gt;
+          &lt;span&gt;⏱ ${c.hours}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;course-footer&quot;&gt;
+          ${priceHtml}
+          &lt;button class=&quot;btn btn-outline btn-sm&quot; onclick=&quot;event.stopPropagation(); onCourseClick('${c.id}')&quot;&gt;${accessible ? '开始学习' : '了解详情'}&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;`;
+}
+
+function renderCourses() {
+  renderUserBar();
+  let filtered = COURSES;
+  if (currentFilter === 'ultrasound') filtered = COURSES.filter(c =&gt; c.type === 'ultrasound');
+  else if (currentFilter === 'smartcage') filtered = COURSES.filter(c =&gt; c.type === 'smartcage');
+  else if (currentFilter === 'free') filtered = COURSES.filter(c =&gt; c.free);
+
+  document.getElementById('course-count').textContent = `共 ${filtered.length} 门课程${currentUser ? ' · 已登录' : ' · 请登录后查看付费内容'}`;
+  document.getElementById('course-list').innerHTML = filtered.map(makeCourseCard).join('');
+  document.getElementById('featured-courses').innerHTML = COURSES.slice(0, 4).map(makeCourseCard).join('');
+}
+
+function renderFeatured() {
+  document.getElementById('featured-courses').innerHTML = COURSES.slice(0, 4).map(makeCourseCard).join('');
+}
+
+function filterCourses(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b =&gt; b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCourses();
+}
+
+function onCourseClick(id) {
+  const c = COURSES.find(x =&gt; x.id === id);
+  if (!c) return;
+  if (c.locked &amp;&amp; !canAccess(c)) {
+    toast('此课程需要绑定对应设备码才能学习', 'error');
+    navigate('bind');
+  } else {
+    navigate('player');
+  }
+}
+
+function playCourse(id) {
+  const c = COURSES.find(x =&gt; x.id === id);
+  if (c &amp;&amp; c.locked &amp;&amp; !canAccess(c)) {
+    toast('请先绑定设备码', 'error');
+    navigate('bind');
+  } else {
+    navigate('player');
+  }
+}
+
+// ==================== 设备码绑定 ====================
+function resetBindForm() {
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeInput').className = 'form-input';
+  document.getElementById('bindResult').className = 'bind-result';
+  document.querySelectorAll('.prefix-chip').forEach(c =&gt; c.classList.remove('active'));
+}
+
+function fillPrefix(prefix, el) {
+  const input = document.getElementById('codeInput');
+  input.value = prefix + '-';
+  input.focus();
+  document.querySelectorAll('.prefix-chip').forEach(c =&gt; c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function onCodeInput() {
+  const input = document.getElementById('codeInput');
+  input.value = input.value.toUpperCase();
+  input.className = 'form-input';
+}
+
+function validateCode(code) {
+  if (!code) return { valid: false, type: null, msg: '请输入设备码' };
+  const parts = code.split('-');
+  if (parts.length !== 3 || parts[0].length !== 2 || parts[1].length !== 4 || parts[2].length !== 4) {
+    return { valid: false, type: null, msg: '格式错误，正确的是：前缀-4位字母-4位数字，如 US-ABCD-1234' };
+  }
+  const prefix = parts[0];
+  if (!['US','IC','MX'].includes(prefix)) {
+    return { valid: false, type: null, msg: '设备码前缀无效，仅支持 US / IC / MX' };
+  }
+  return { valid: true, type: prefix, msg: '验证通过' };
+}
+
+function submitBind() {
+  if (!currentUser) {
+    toast('请先登录再绑定设备码', 'error');
+    navigate('auth');
+    return;
+  }
+  const code = document.getElementById('codeInput').value.trim();
+  const result = validateCode(code);
+  const input = document.getElementById('codeInput');
+  const resultDiv = document.getElementById('bindResult');
+
+  if (!result.valid) {
+    input.className = 'form-input error';
+    resultDiv.className = 'bind-result show error';
+    resultDiv.innerHTML = `&lt;h4 style=&quot;color:var(--danger);&quot;&gt;❌ 绑定失败&lt;/h4&gt;&lt;p&gt;${result.msg}&lt;/p&gt;`;
+    return;
+  }
+
+  // 模拟绑定
+  input.className = 'form-input success';
+  const dt = DEVICE_TYPES[result.type];
+  userDevices.push({ code, type: result.type, label: dt.label });
+  const unlockedCourses = dt.courses.map(cid =&gt; COURSES.find(c =&gt; c.id === cid)).filter(Boolean).map(c =&gt; c.title);
+  resultDiv.className = 'bind-result show success';
+  resultDiv.innerHTML = `
+    &lt;h4 style=&quot;color:var(--success);&quot;&gt;✅ 绑定成功！&lt;/h4&gt;
+    &lt;p&gt;设备类型：&lt;span class=&quot;device-type&quot;&gt;${dt.label}&lt;/span&gt;（${result.type}前缀）&lt;/p&gt;
+    &lt;p&gt;设备码：&lt;code style=&quot;font-family:monospace;font-weight:700;&quot;&gt;${code}&lt;/code&gt;&lt;/p&gt;
+    &lt;p style=&quot;margin-top:8px;&quot;&gt;已解锁课程（${unlockedCourses.length}门）：&lt;/p&gt;
+    &lt;div class=&quot;unlocked-list&quot;&gt;${unlockedCourses.map(t =&gt; `&lt;span class=&quot;unlocked-tag&quot;&gt;${t}&lt;/span&gt;`).join('')}&lt;/div&gt;
+    &lt;p style=&quot;margin-top:10px;font-size:12px;color:var(--text-secondary);&quot;&gt;每个账号最多绑定3台设备，设备码与账号绑定后不可转移。&lt;/p&gt;`;
+  toast('设备绑定成功！', 'success');
+  renderUserBar();
+}
+
+function renderDevices() {
+  renderUserBar();
+  if (userDevices.length === 0) {
+    document.getElementById('deviceList').innerHTML = '';
+    document.getElementById('noDevices').style.display = 'block';
+    return;
+  }
+  document.getElementById('noDevices').style.display = 'none';
+  document.getElementById('deviceList').innerHTML = userDevices.map(d =&gt; {
+    const dt = DEVICE_TYPES[d.type];
+    const allCages = ['c01','c04','c05','c07']; // US
+    const allSmart = ['c02','c03','c06','c09']; // IC
+    const courses = d.type === 'US' ? allCages : d.type === 'IC' ? allSmart : [...allCages,...allSmart];
+    const hasU = courses.some(id =&gt; COURSES.find(c =&gt; c.id === id));
+    return `
+      &lt;div class=&quot;device-item&quot;&gt;
+        &lt;div class=&quot;device-icon ${d.type.toLowerCase()}&quot;&gt;${d.type === 'US' ? '🔬' : d.type === 'IC' ? '🏠' : '🔗'}&lt;/div&gt;
+        &lt;div class=&quot;device-info&quot;&gt;
+          &lt;h3&gt;${dt.label}&lt;/h3&gt;
+          &lt;p&gt;${d.code} · 绑定成功&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;device-perms&quot;&gt;
+          &lt;span class=&quot;perm-tag ${d.type === 'US' || d.type === 'MX' ? 'active' : 'inactive'}&quot;&gt;超声课程&lt;/span&gt;
+          &lt;span class=&quot;perm-tag ${d.type === 'IC' || d.type === 'MX' ? 'active' : 'inactive'}&quot;&gt;智能笼课程&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;`;
+  }).join('');
+}
+
+// ==================== 播放器 ====================
+let currentChapter = 0;
+const CHAPTERS = [
+  { title: '第一章：实验小鼠概述与分类', dur: '12:34', secs: 754 },
+  { title: '第二章：影像学检查基础原理', dur: '18:22', secs: 1102 },
+  { title: '第三章：超声设备操作演示', dur: '24:15', secs: 1455 },
+  { title: '第四章：实拍案例分析', dur: '31:08', secs: 1868 },
+  { title: '第五章：常见问题与解决方案', dur: '15:47', secs: 947 },
+];
+
+function renderPlayer() {
+  renderUserBar();
+  const hasAccess = canAccess(COURSES[0]);
+  document.getElementById('playerOverlay').style.display = hasAccess ? 'flex' : 'none';
+  document.getElementById('playerBar').style.display = isPlaying ? 'flex' : 'none';
+  document.getElementById('playerAccessDenied').style.display = hasAccess ? 'none' : 'block';
+  document.getElementById('chapters').style.display = hasAccess ? 'block' : 'none';
+  updateChapterHighlight();
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  const overlay = document.getElementById('playerOverlay');
+  const bar = document.getElementById('playerBar');
+  if (isPlaying) {
+    overlay.style.display = 'none';
+    bar.style.display = 'flex';
+    toast('▶ 正在播放（演示模式，无真实视频源）', 'info');
+    simulateProgress();
+  } else {
+    overlay.style.display = 'flex';
+    bar.style.display = 'none';
+  }
+}
+
+let progressInterval = null;
+function simulateProgress() {
+  clearInterval(progressInterval);
+  let pct = 0;
+  progressInterval = setInterval(() =&gt; {
+    if (!isPlaying) { clearInterval(progressInterval); return; }
+    pct += 0.5;
+    if (pct &gt; 100) { pct = 0; }
+    document.getElementById('pbFill').style.width = pct + '%';
+    const totalSecs = CHAPTERS[currentChapter].secs;
+    const curSecs = Math.floor(totalSecs * pct / 100);
+    const mm = String(Math.floor(curSecs/60)).padStart(2,'0');
+    const ss = String(curSecs%60).padStart(2,'0');
+    document.getElementById('pbTime').textContent = mm + ':' + ss + ' / ' + CHAPTERS[currentChapter].dur;
+  }, 300);
+}
+
+function onTimeUpdate() {}
+
+function selectChapter(idx) {
+  currentChapter = idx;
+  isPlaying = false;
+  renderPlayer();
+  setTimeout(() =&gt; togglePlay(), 100);
+}
+
+function updateChapterHighlight() {
+  document.querySelectorAll('.chapter-item').forEach((el, i) =&gt; {
+    el.classList.toggle('playing', i === currentChapter);
+  });
+  document.getElementById('playerTitle').textContent = CHAPTERS[currentChapter].title;
+  document.getElementById('playerSub').textContent = '第' + (currentChapter+1) + '章 · ' + CHAPTERS[currentChapter].dur;
+}
+
+// ==================== 登录注册 ====================
+function switchAuthTab(tab) {
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('authTitle').textContent = tab === 'login' ? '欢迎回来' : '创建账号';
+  document.getElementById('authSub').textContent = tab === 'login' ? '登录后享受完整学习体验' : '注册即表示同意《用户协议》和《隐私政策》';
+  document.getElementById('authSubmitBtn').textContent = tab === 'login' ? '登录' : '注册';
+  document.getElementById('authName').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('deviceCodeField').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+function handleAuth(e) {
+  e.preventDefault();
+  const phone = document.getElementById('authPhone').value.trim();
+  const pwd = document.getElementById('authPwd').value;
+  const name = document.getElementById('authName').value.trim() || '用户' + Math.floor(Math.random()*9000+1000);
+  const authCode = document.getElementById('authCode').value.trim().toUpperCase();
+
+  if (!phone || !pwd) { toast('请填写手机号和密码', 'error'); return false; }
+  if (pwd.length &lt; 6) { toast('密码至少6位', 'error'); return false; }
+
+  // 模拟登录
+  currentUser = { name, phone };
+  if (authCode &amp;&amp; validateCode(authCode).valid) {
+    const type = validateCode(authCode).type;
+    userDevices.push({ code: authCode, type, label: DEVICE_TYPES[type].label });
+  }
+  toast('登录成功！', 'success');
+  navigate('courses');
+  return false;
+}
+
+function wechatLogin() {
+  toast('微信登录暂未开放，请使用手机号注册', 'error');
+}
+
+// ==================== 初始化 ====================
+document.addEventListener('DOMContentLoaded', () =&gt; {
+  renderFeatured();
+  // 默认显示首页
+});
+&lt;/script&gt;
+"></iframe>
+      </div>
+    </div>
+
+        <div id="report-1" class="tab-content">
           <div class="report-body">
-<div class="container">
+            <div class="container">
+              <div class="container">
   <div class="header">
     <h1>竞品分析报告</h1>
     <div class="subtitle">小动物科研培训平台 · 医学影像/兽医在线教育赛道研究 &nbsp;|&nbsp; 2026年3月</div>
@@ -623,10 +1538,13 @@
         <li><strong>实验动物科研培训严重供给不足：</strong>国内现有平台要么偏向宠物临床（宠医客），要么偏向法规合规（各省实验动物平台），几乎没有面向<strong>小动物科研实验设计、模型构建、数据采集（影像方向）</strong>的系统性在线教育产品。</li>
         <li><strong>兽医影像+科研的交叉地带无人占领：</strong>SonoPath做影像但不做科研；国内宠医课堂做影像但偏向临床。科研场景下的超声应用（动物模型建立、药物疗效评估、影像组学数据采集等）几乎没有系统课程。</li>
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-2" class="tab-content" style="display:none">
+        <div id="report-2" class="tab-content">
           <div class="report-body">
-<div class="container">
+            <div class="container">
+              <div class="container">
   <div class="header">
     <h1>目标用户画像报告</h1>
     <div class="subtitle">小动物科研培训平台 · 用户群体深度分析 &nbsp;|&nbsp; 2026年3月</div>
@@ -948,10 +1866,13 @@
         <td>证书需求、职业晋升</td>
         
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-3" class="tab-content" style="display:none">
+        <div id="report-3" class="tab-content">
           <div class="report-body">
-<div class="container">
+            <div class="container">
+              <div class="container">
   <div class="header">
     <h1>课程内容来源报告</h1>
     <div class="subtitle">小动物科研培训平台 · 课程制作与采购策略 &nbsp;|&nbsp; 2026年3月</div>
@@ -1340,10 +2261,13 @@
       <table>
         <tr><th>指标</th><th>健康值</th><th>预警值
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-4" class="tab-content" style="display:none">
+        <div id="report-4" class="tab-content">
           <div class="report-body">
-<div class="container">
+            <div class="container">
+              <div class="container">
   <div class="header">
     <h1>设备码发放渠道报告</h1>
     <div class="subtitle">小动物科研培训平台 · 医疗器械销售与设备码体系设计 &nbsp;|&nbsp; 2026年3月</div>
@@ -1736,10 +2660,13 @@ td>激活后有效期限（1年/2年/永久）</td>
         <th>成本</th>
         <th>防护效果</th
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-5" class="tab-content" style="display:none">
+        <div id="report-5" class="tab-content">
           <div class="report-body">
-<div class="container">
+            <div class="container">
+              <div class="container">
   <div class="header">
     <h1>定价策略报告</h1>
     <div class="subtitle">小动物科研培训平台 · 课程定价与商业模式设计 &nbsp;|&nbsp; 2026年3月</div>
@@ -2149,22 +3076,197 @@ td>激活后有效期限（1年/2年/永久）</td>
         <td>解锁课程额外章节</td>
         <td>低成本
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-6" class="tab-content" style="display:none">
-          <div class="report-body"><p>无法解析内容</p></div>
-        </div>
-        <div id="report-7" class="tab-content" style="display:none">
-          <div class="report-body"><p>无法解析内容</p></div>
-        </div>
-        <div id="report-8" class="tab-content" style="display:none">
-          <div class="report-body"><p>无法解析内容</p></div>
-        </div>
-        <div id="report-9" class="tab-content" style="display:none">
-          <div class="report-body"><p>无法解析内容</p></div>
-        </div>
-        <div id="report-10" class="tab-content" style="display:none">
+        <div id="report-6" class="tab-content">
           <div class="report-body">
-<div class="wrap">
+            <div class="container">
+              <div class="container">
+  <div class="header">
+    <h1>合规资质报告</h1>
+    <div class="subtitle">小动物科研培训平台 · 医疗培训合规红线与资质申请清单 &nbsp;|&nbsp; 2026年3月</div>
+  </div>
+  <div class="section">
+    <h2>一、合规风险概述</h2>
+    <p>本平台涉及动物医疗培训，属医疗健康赛道，合规风险极高。以下两项为最高风险项，必须在产品设计阶段解决：</p>
+    <div class="risk-box" style="background:#fee2e2;border:1px solid #dc2626;border-radius:8px;padding:16px;margin:12px 0">
+      <strong style="color:#dc2626">⚠️ 最高风险（两项）</strong>
+      <ul style="margin:8px 0 0 20px;font-size:13px;color:#555">
+        <li><strong>直播中出现患者/动物主人隐私</strong>：演示病例未脱敏，评分「高概率 × 高影响」</li>
+        <li><strong>AI 给出诊断建议</strong>：问诊类 AI 功能可能被视为医疗器械，评分「高概率 × 高影响」</li>
+      </ul>
+    </div>
+  </div>
+  <div class="section">
+    <h2>二、必须具备的资质</h2>
+    <table>
+      <tr><th>资质名称</th><th>申请难度</th><th>预计周期</th><th>说明</th></tr>
+      <tr><td>ICP 备案</td><td>低</td><td>15-30 天</td><td>网站必备，工信部免费申请</td></tr>
+      <tr><td>ICP 许可证</td><td>中</td><td>60-90 天</td><td>涉及收费需申请，注册资金≥100万</td></tr>
+      <tr><td>网络文化经营许可证</td><td>高</td><td>30-60 天</td><td>录制课/直播类目需申请</td></tr>
+      <tr><td>广播电视节目制作许可证</td><td>高</td><td>30-60 天</td><td>视频内容制作/发布需申请</td></tr>
+      <tr><td>医疗器械广告审查</td><td>高</td><td>30 天</td><td>涉及医疗器械宣传需申请</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <h2>三、直播合规操作规程</h2>
+    <ul>
+      <li>直播前：讲师须签署《内容合规承诺书》，声明所有病例已获授权或已脱敏</li>
+      <li>直播中：必须开启延迟播放（建议 30 秒），人工巡检员实时监控</li>
+      <li>AI 预审：引入 AI 内容审核模型，对弹幕/评论进行实时过滤</li>
+      <li>直播后：录像须经人工审核后方可对外展示</li>
+    </ul>
+  </div>
+  <div class="section">
+    <h2>四、避坑指南</h2>
+    <ul>
+      <li>不要在课程中展示未经授权的真实患者照片/病历</li>
+      <li>AI 问答功能只给参考性建议，必须有「本产品不构成医疗建议」免责声明</li>
+      <li>不得在未取得资质的情况下宣传「治疗」「治愈」等医疗效果词汇</li>
+      <li>超声/影像设备教学须注明「仅供培训使用，不作为临床诊断依据」</li>
+    </ul>
+  </div>
+</div>
+            </div>
+          </div>
+        </div>
+        <div id="report-7" class="tab-content">
+          <div class="report-body">
+            <div class="container">
+              <div class="container">
+  <div class="header">
+    <h1>域名与品牌报告</h1>
+    <div class="subtitle">小动物科研培训平台 · 域名选择与品牌命名建议 &nbsp;|&nbsp; 2026年3月</div>
+  </div>
+  <div class="section">
+    <h2>一、域名选择建议</h2>
+    <p>域名是品牌的核心资产，建议按以下优先级选择：</p>
+    <table>
+      <tr><th>优先级</th><th>域名类型</th><th>示例</th><th>说明</th></tr>
+      <tr><td>P0</td><td>.com 全拼</td><td>xiaodongwu.com</td><td>最理想，用户信任度最高</td></tr>
+      <tr><td>P0</td><td>.cn 全拼</td><td>xiaodongwu.cn</td><td>国内首选，备案便捷</td></tr>
+      <tr><td>P1</td><td>关键词.com</td><td>vetlearn.com / animaltraining.com</td><td>SEO友好，需确认可注册</td></tr>
+      <tr><td>P2</td><td>品牌名.com</td><td>自定义品牌词.com</td><td>待定，需商标检索</td></tr>
+    </table>
+    <p style="margin-top:12px;font-size:12px;color:#999">注意：.com/.cn 可注册性需在确定名称后立即查询，热门关键词可能被抢注。</p>
+  </div>
+  <div class="section">
+    <h2>二、ICP 备案流程</h2>
+    <p>国内网站必须完成 ICP 备案方可绑定国内服务器：</p>
+    <ul>
+      <li><strong>个人备案</strong>：资料简单，5-10 个工作日，仅限非盈利内容</li>
+      <li><strong>企业备案</strong>：需营业执照，15-30 个工作日，可开展收费业务</li>
+      <li><strong>备案期间</strong>：可临时使用香港/海外服务器保持访问</li>
+    </ul>
+    <p style="margin-top:10px">建议：提前准备企业营业执照（注册资金建议≥100万以满足ICP许可证条件）。</p>
+  </div>
+  <div class="section">
+    <h2>三、品牌命名方向</h2>
+    <ul>
+      <li><strong>学术路线</strong>：小动物医学培训平台 / 兽医继续教育网</li>
+      <li><strong>平台路线</strong>：小动物科研在线 / 兽医培训频道</li>
+      <li><strong>设备路线</strong>：设备码学院 / 影像大师</li>
+    </ul>
+    <p style="margin-top:10px">建议品牌名兼顾专业感与亲和力，避免过于学术导致用户距离感。</p>
+  </div>
+</div>
+            </div>
+          </div>
+        </div>
+        <div id="report-8" class="tab-content">
+          <div class="report-body">
+            <div class="container">
+              <div class="container">
+  <div class="header">
+    <h1>推广获客报告</h1>
+    <div class="subtitle">小动物科研培训平台 · 冷启动策略与流量获取路径 &nbsp;|&nbsp; 2026年3月</div>
+  </div>
+  <div class="section">
+    <h2>一、核心获客逻辑</h2>
+    <p>本平台差异化核心是「设备码 + 医学数据库」，推广策略围绕这一核心展开：</p>
+    <ul>
+      <li><strong>设备渠道地推</strong>：与设备经销商合作，购买设备附赠课程兑换码（低成本获客）</li>
+      <li><strong>兽医 KOL</strong>：邀请头部兽医博主合作，制作超声检查教学短视频</li>
+      <li><strong>SEO 内容</strong>：「犬超声入门」「猫腹腔超声教程」等长尾词，占领百度搜索</li>
+      <li><strong>行业社群</strong>：兽医微信群、知乎专栏、B站兽医分区精准投放</li>
+    </ul>
+  </div>
+  <div class="section">
+    <h2>二、冷启动方案（0-3个月）</h2>
+    <table>
+      <tr><th>渠道</th><th>投入</th><th>预计获客</th><th>优先级</th></tr>
+      <tr><td>设备经销商合作</td><td>低（课程分成）</td><td>50-200 人/月</td><td>★★★★★</td></tr>
+      <tr><td>B站/抖音教学视频</td><td>中（视频制作¥5000）</td><td>100-500 人/月</td><td>★★★★</td></tr>
+      <tr><td>兽医社群投放</td><td>低（人工）</td><td>30-100 人/月</td><td>★★★</td></tr>
+      <tr><td>百度/微信搜索广告</td><td>高（¥2万/月起）</td><td>200-500 人/月</td><td>★★★</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <h2>三、增长飞轮设计</h2>
+    <ul>
+      <li>用户购买设备 → 获得课程兑换码 → 注册平台 → 形成学习习惯</li>
+      <li>学习过程中 → 分享课程获取更多权限 → 口碑传播</li>
+      <li>进阶用户 → 成为课程创作者 → 平台内容生态</li>
+    </ul>
+  </div>
+</div>
+            </div>
+          </div>
+        </div>
+        <div id="report-9" class="tab-content">
+          <div class="report-body">
+            <div class="container">
+              <div class="container">
+  <div class="header">
+    <h1>支付接入报告</h1>
+    <div class="subtitle">小动物科研培训平台 · 微信/支付宝接入与手续费测算 &nbsp;|&nbsp; 2026年3月</div>
+  </div>
+  <div class="section">
+    <h2>一、支付方式选择</h2>
+    <p>国内在线教育平台主流支付方式：</p>
+    <table>
+      <tr><th>支付方式</th><th>接入难度</th><th>手续费率</th><th>备注</th></tr>
+      <tr><td>微信支付</td><td>低</td><td>0.6%</td><td>必须，企业账户</td></tr>
+      <tr><td>支付宝</td><td>低</td><td>0.6%</td><td>必须，企业账户</td></tr>
+      <tr><td>微信分账</td><td>中</td><td>0.6%+0.1%</td><td>用于给讲师分账</td></tr>
+      <tr><td>对公转账</td><td>无</td><td>0</td><td>适合大额/机构采购</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <h2>二、手续费测算</h2>
+    <ul>
+      <li>月销售额 ¥5 万：手续费约 ¥300/月</li>
+      <li>月销售额 ¥20 万：手续费约 ¥1,200/月</li>
+      <li>月销售额 ¥100 万：手续费约 ¥6,000/月</li>
+    </ul>
+    <p style="margin-top:10px">初期规模较小，手续费占比可控。收入增长后手续费绝对值增加，但规模效应显著。</p>
+  </div>
+  <div class="section">
+    <h2>三、接入方案</h2>
+    <p>推荐使用 <strong>Ping++</strong> 或 <strong>Xor Pay</strong> 聚合支付，一套接口对接微信/支付宝/银联：</p>
+    <ul>
+      <li>个人开发者：可使用收款码模式（低费率，但有限额）</li>
+      <li>企业开发者：建议直接对接微信商户API，手续费更低，功能更全</li>
+      <li>教育类目特殊：需在微信商户平台申请「教育-在线课程」类目，享受0.6%优惠费率</li>
+    </ul>
+  </div>
+  <div class="section">
+    <h2>四、税务注意事项</h2>
+    <ul>
+      <li>企业账户收款需开具发票，建议对接自动化开票系统</li>
+      <li>个人账户收款需关注个人所得税年度汇算</li>
+      <li>机构采购需提供增值税专用发票</li>
+    </ul>
+  </div>
+</div>
+            </div>
+          </div>
+        </div>
+        <div id="report-10" class="tab-content">
+          <div class="report-body">
+            <div class="container">
+              <div class="wrap">
 
 <!-- 报头 -->
 <div class="hdr">
@@ -2411,10 +3513,13 @@ td>激活后有效期限（1年/2年/永久）</td>
   <h3>10.5.3 降级策略（必备）</h3>
   <p>故障时不要硬扛，要有
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-11" class="tab-content" style="display:none">
+        <div id="report-11" class="tab-content">
           <div class="report-body">
-<div class="wrap">
+            <div class="container">
+              <div class="wrap">
 
 <!-- 报头 -->
 <div class="hdr">
@@ -2691,10 +3796,13 @@ Closes #12
     <div style="background:#8b2635; color:#fff; padding: 8px 16px; border-radius: 4px; display: inline-block; margin: 4px;">GitHub main 分支</div>
     <div style="color:#888; 
 <p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+            </div>
+          </div>
         </div>
-        <div id="report-12" class="tab-content" style="display:none">
+        <div id="report-12" class="tab-content">
           <div class="report-body">
-<div class="wrap">
+            <div class="container">
+              <div class="wrap">
 
 <!-- 报头 -->
 <div class="hdr">
@@ -2917,21 +4025,28 @@ function drawWatermark() {
     <tr><th>方案</th><th>优点</th><th>缺点</th><th>推荐度</th></tr>
     <tr><td><strong>自建 WebSocket（Node.js / Go）</strong></td><td>完全可控，成本低</td><td>需要自己处理高并发（1万并发=约10GB内存）</td><td><span class="bdg bdg-g">推荐</span></td></tr>
     <tr><td>腾讯云 IM（即时通讯）</td><td>接入简单，SDK完善</td><td>按消息条数收费，用户量大了成本高</td><td><span class="bdg bdg-y">备选</span></td><
-<p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p></div>
+<p style="color:#999;text-align:center;padding:20px">[内容已截断，原文件见 /小动物科研培训平台/ ]</p>
+            </div>
+          </div>
         </div>
+
   </div>
 </div>
 
 <script>
-  function showTab(id) {
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    var target = document.getElementById(id);
-    if (target) target.style.display = 'block';
-    var btn = document.querySelector('.tab-btn[data-tab="' + id + '"]');
-    if (btn) btn.classList.add('active');
-    window.scrollTo(0, 0);
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+  var target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    // Scroll to top of content
+    document.querySelector('.content').scrollTop = 0;
   }
+  var btn = document.querySelector('.tab-btn[data-tab="' + id + '"]');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
 </script>
 </body>
 </html>
