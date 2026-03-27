@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小动物科研培训网站 - 功能模块树状图 v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f3ef;
+    color: #2c2c2c;
+    padding: 40px 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .header h1 { font-size: 26px; color: #8b2635; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: #999; }
+  .header .tag {
+    display: inline-block;
+    background: #8b2635;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  .meta-bar {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 12px;
+    color: #888;
+    background: #f5f3ef;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .tree {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 36px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .tree ul { list-style: none; padding-left: 24px; }
+  .tree li { position: relative; padding: 5px 0; font-size: 13px; line-height: 1.7; }
+  .tree li:before {
+    content: ''; position: absolute; left: -18px; top: 16px;
+    width: 12px; height: 1px; background: #d4c5b0;
+  }
+  .tree li:after {
+    content: ''; position: absolute; left: -18px; top: 0;
+    width: 1px; height: 100%; background: #d4c5b0;
+  }
+  .tree li:last-child:after { height: 16px; }
+
+  .l1 { font-weight: 700; font-size: 14px; color: #8b2635; margin-top: 14px; padding-bottom: 4px; border-bottom: 1px solid #f0e8e0; }
+  .l1:first-child { margin-top: 0; }
+  .l2 { font-weight: 600; font-size: 13px; color: #2c5f4a; margin-top: 8px; }
+  .l3 { font-size: 12px; color: #555; }
+  .l4 { font-size: 11px; color: #999; padding-left: 12px; }
+
+  .toggle { cursor: pointer; user-select: none; margin-right: 5px; color: #8b2635; font-weight: bold; font-size: 10px; }
+  .collapsed ul { display: none; }
+
+  .phase-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+    font-weight: normal;
+  }
+  .phase-p1 { background: #e63946; color: #fff; }
+  .phase-p2 { background: #457b9d; color: #fff; }
+  .phase-p3 { background: #2a9d8f; color: #fff; }
+  .phase-p4 { background: #e9c46a; color: #333; }
+  .phase-p5 { background: #6a6051; color: #fff; }
+  .phase-p6 { background: #9b5de5; color: #fff; }
+  .phase-p7 { background: #f4a261; color: #333; }
+
+  .badge { font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+  .badge-core { background: #ffe5e5; color: #c0392b; }
+  .badge-key { background: #fff3cd; color: #856404; }
+  .badge-risk { background: #f8d7da; color: #721c24; }
+  .badge-ai { background: #e8daef; color: #6f42c1; }
+
+  .legend {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: #faf8f3;
+    border: 1px solid #e8e0d5;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #666;
+  }
+  .legend h3 { font-size: 13px; color: #8b2635; margin-bottom: 10px; }
+  .legend ul { list-style: disc; padding-left: 20px; }
+  .legend li { margin: 4px 0; }
+
+  .footer { text-align: center; margin-top: 28px; font-size: 11px; color: #bbb; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🐾 小动物科研培训网站</h1>
+    <p>功能模块架构树状图 · PRD v2.0 可行性分析版</p>
+    <span class="tag">网站版 · 设备码权限体系 · 直播+AI预留</span>
+    <div class="meta-bar">
+      <span class="meta-item">📅 2026.03.26</span>
+      <span class="meta-item">👨‍💻 村口情报社 · 二狗</span>
+      <span class="meta-item">⏱ 开发周期 10-14 周</span>
+      <span class="meta-item">💰 启动成本 ¥600-1000/月（不含人力）</span>
+    </div>
+  </div>
+
+  <div class="tree">
+    <ul>
+      <!-- 一、用户与账户体系 -->
+      <li class="l1">
+        <span class="toggle">▼</span>一、用户与账户体系
+        <span class="phase-tag phase-p1">P1</span>
+        <span class="badge badge-core">核心根基</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>1.1 角色与权限等级
+            <ul>
+              <li class="l3">游客（未登录）→ 只能看免费内容</li>
+              <li class="l3">普通用户（已登录，无设备）→ 免费 + 可付费购买单课</li>
+              <li class="l3">超声绑定用户 → 解锁超声全部付费课</li>
+              <li class="l3">智能笼绑定用户 → 解锁智能笼全部付费课</li>
+              <li class="l3">双设备用户 → 同时解锁超声 + 智能笼全部课程</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>1.2 注册流程
+            <ul>
+              <li class="l3">手机号 + 验证码（60秒防刷，5分钟有效）</li>
+              <li class="l3">密码设置（6-20位，数字+字母）</li>
+              <li class="l3">设备码输入 → 后台校验有效性 → 识别设备类型（US/IC/MX）</li>
+              <li class="l3">设备码状态分支：未绑定/已绑定其他账号/已过期/解绑中</li>
+              <li class="l3">协议勾选（隐私政策+用户协议+医疗免责）</li>
+              <li class="l4">推荐：微信扫码输入设备码，体验零门槛</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>1.3 登录流程
+            <ul>
+              <li class="l3">手机号 + 密码，或手机号 + 验证码</li>
+              <li class="l3">密码错误3次 → 图形验证码；连续5次 → 锁定30分钟</li>
+              <li class="l3">登录后合并所有已绑定设备类型 → 计算课程权限列表</li>
+              <li class="l3">记录设备指纹 → 异常IP多账号关联告警</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>1.4 账户功能
+            <ul>
+              <li class="l3">个人主页（头像/昵称/认证标识）</li>
+              <li class="l3">学习档案（学习时长/课程进度/证书）</li>
+              <li class="l3">消息中心（系统通知/课程更新/直播提醒）</li>
+              <li class="l3">通知设置（邮件订阅/短信/推送偏好）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 二、设备码与权限管理 -->
+      <li class="l1">
+        <span class="toggle">▼</span>二、设备码与权限管理
+        <span class="phase-tag phase-p1"></span>
+        <span class="badge badge-key">核心护城河</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>2.1 设备码编码设计
+            <ul>
+              <li class="l3">格式：产品前缀(2位) + 批次号(4位) + 随机序列号(6位) + 校验位(1位)</li>
+              <li class="l3">示例：US-2026-384721-3 / IC-2026-XXXXXX-X / MX-2026-XXXXXX-X</li>
+              <li class="l3">校验位：前12位数字取模97，100减去余数（ISO 7064 MOD 97-10，防伪造）</li>
+              <li class="l3">前缀：US=超声系列，IC=智能笼系列，MX=混合系列（同时解锁US+IC）</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>2.2 多设备绑定规则
+            <ul>
+              <li class="l3">一账号可绑定多台不同类型设备，权限叠加</li>
+              <li class="l3">同一类型设备不可重复绑定（报错"该类型设备已绑定"）</li>
+              <li class="l3">最多绑定 3 台设备（不论类型）</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>2.3 解绑流程（必须审核）
+            <ul>
+              <li class="l3">用户申请 → 填写原因（设备损坏/换机/不再使用/其他）</li>
+              <li class="l3">提交后设备码状态变为"解绑中"（此时不可用）</li>
+              <li class="l3">后台管理员审核（查看原因 + 历史学习记录）</li>
+              <li class="l3">拒绝 → 恢复设备绑定；通过 → 设备码恢复"未绑定"</li>
+              <li class="l3">审核结果邮件/短信通知用户</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>2.4 权限矩阵
+            <ul>
+              <li class="l3">游客：免费科普/试听课/直播预告</li>
+              <li class="l3">普通用户：免费内容 + 💰 付费购买单课/专栏</li>
+              <li class="l3">超声绑定：超声全部付费课/直播/文档（无需额外购买）</li>
+              <li class="l3">智能笼绑定：智能笼全部付费课/直播/文档（无需额外购买）</li>
+              <li class="l3">AI智能问答：双设备用户均可用（设备码绑定后解锁）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 三、课程内容系统 -->
+      <li class="l1">
+        <span class="toggle">▼</span>三、课程内容系统
+        <span class="phase-tag phase-p2"></span>
+        <span class="badge badge-core">用户留存根本</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>3.1 课程管理
+            <ul>
+              <li class="l3">按学科分类：超声基础 / 超声临床（腹部/心超/妇产/小动物）/ 智能笼系统 / 影像诊断 / 设备维护</li>
+              <li class="l3">按级别：⭐入门（学生/新手工程师）/ ⭐⭐进阶（技师/住院医）/ ⭐⭐⭐高阶（主治/资深工程师）</li>
+              <li class="l3">按形式：🎬视频课（主，占比60%）/ 📄图文课 / 🔴直播课 / 🎧音频课</li>
+              <li class="l3">课程单元结构：课程→章节→课时→知识点</li>
+              <li class="l3">课程上下架管理 / 批量导入</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>3.2 视频播放器（Video.js / DPlayer）
+            <ul>
+              <li class="l3">HLS/DASH 自适应码流（480p/720p/1080p）</li>
+              <li class="l3">倍速播放（0.5x~2.0x）/ 断点续播 / 记忆播放位置</li>
+              <li class="l3">DRM 加密播放（防下载）<span class="badge badge-risk">防盗</span></li>
+              <li class="l3">跑马灯水印叠加（用户ID+时间戳，防录屏）<span class="badge badge-risk">防盗</span></li>
+              <li class="l3">每30秒进度保存 / 章节列表跳转 / 讲义PDF预览</li>
+              <li class="l3">章节答题解锁：每10分钟答对1道题才能继续，防打断连续录屏</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>3.3 视频防盗体系 <span class="badge badge-risk">高风险</span>
+            <ul>
+              <li class="l3">Layer 1 — DRM加密：VOD HLS CMAF，浏览器端解密，源文件不可直接下载</li>
+              <li class="l3">Layer 2 — URL签名：CDN Key 签名，GET参数时效签名（默认1小时）</li>
+              <li class="l3">Layer 3 — Referer黑名单：禁止常见视频网站嵌入</li>
+              <li class="l3">Layer 4 — 跑马灯水印：切片时嵌入动态水印</li>
+              <li class="l3">Layer 5 — 章节答题解锁：打断连续录屏</li>
+              <li class="l3">Layer 6 — IP+UA限制：同一账号最多2设备同时播放</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>3.4 学习工具
+            <ul>
+              <li class="l3">收藏/历史记录</li>
+              <li class="l3">课程搜索（标题/标签/学科）</li>
+              <li class="l3">文档全文搜索（PDF在线预览）</li>
+              <li class="l3">学习路径（体系课完整路径 / 单课购买）</li>
+              <li class="l3">学习计划（自定义周期目标）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 四、直播培训系统 -->
+      <li class="l1">
+        <span class="toggle">▼</span>四、直播培训系统
+        <span class="phase-tag phase-p4"></span>
+        <span class="badge badge-key">差异化竞争</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>4.1 直播类型
+            <ul>
+              <li class="l3">公开直播：免费观看，预约制，有回放（产品发布会/公开课/学术讲座）</li>
+              <li class="l3">专业直播：设备码绑定用户专属，有回放（内部培训/高阶课程/实操演示）</li>
+              <li class="l3">付费直播：单独购票，限时回放（专题研修班/认证课程）</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>4.2 技术链路
+            <ul>
+              <li class="l3">讲师推流：OBS Studio / 腾讯云直播控制台（网页推流）→ RTMP over SSL</li>
+              <li class="l3">推流参数：1080p / 720p，30fps，2500-4000kbps，AAC-LC 128kbps</li>
+              <li class="l3">腾讯云 CSS：实时转码（多码率）/ 截图鉴黄 / 自动录制MP4 / 敏感词过滤</li>
+              <li class="l3">观众端：flv.js（推荐，延迟3-5秒）/ HLS.js（兼容性，5-10秒）/ DPlayer</li>
+              <li class="l3">自动降级：flv → hls → mp4（根据浏览器支持）</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>4.3 直播功能清单
+            <ul>
+              <li class="l3">直播预约 → 开播前邮件/短信/Web Push提醒 <span class="badge badge-core">必须</span></li>
+              <li class="l3">实时观看 + 弹幕/聊天（WebSocket或腾讯云IM）<span class="badge badge-core">必须</span></li>
+              <li class="l3">禁言/踢人（管理员操作）<span class="badge badge-core">必须</span></li>
+              <li class="l3">直播回放自动生成（CSS→VOD）<span class="badge badge-core">必须</span></li>
+              <li class="l3">回放点播（复用点播播放器）<span class="badge badge-core">必须</span></li>
+              <li class="l3">直播答题（WebSocket广播题目→统计→结果）<span class="badge badge-key">重要</span></li>
+              <li class="l3">直播公告（跑马灯推送）<span class="badge badge-key">重要</span></li>
+              <li class="l3">直播数据统计（观看人数/峰值/时长/弹幕数）<span class="badge badge-key">重要</span></li>
+              <li class="l3">回放剪辑（云函数API触发）<span class="badge badge-key">重要</span></li>
+              <li class="l3">连麦互动（WebRTC/TRTC）<span class="badge badge-ai">可选</span></li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>4.4 直播间页面结构
+            <ul>
+              <li class="l3">顶部：直播标题 · 讲师信息 · 状态（预告/直播中/已结束）</li>
+              <li class="l3">左侧：视频播放器（flv.js）— 弹幕覆盖层 / 答题弹窗 / 跑马灯公告</li>
+              <li class="l3">右侧：弹幕列表 / 聊天输入框 / 预约按钮 / 观看人数热度</li>
+              <li class="l3">下方：课程简介 / 章节列表 / 相关推荐</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>4.5 直播合规要求 <span class="badge badge-risk">最高风险</span>
+            <ul>
+              <li class="l3">直播前讲师须签《直播行为规范承诺书》</li>
+              <li class="l3">画面不得出现患者面部/病历信息/设备序列号（需遮挡）</li>
+              <li class="l3">AI预审（截图+语音识别）后才可发布回放</li>
+              <li class="l3">管理员实时监播，发现违规立即中断推流</li>
+              <li class="l3">回放上线前人工审核确认</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 五、支付与会员系统 -->
+      <li class="l1">
+        <span class="toggle">▼</span>五、支付与会员系统
+        <span class="phase-tag phase-p6"></span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>5.1 会员体系
+            <ul>
+              <li class="l3">免费会员：基础内容（免费科普/试听课/直播预告）</li>
+              <li class="l3">月度/年度会员：畅学全站（按设备绑定走，不按会员）</li>
+              <li class="l3">机构会员：团队管理/数据统计/批量账号</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>5.2 付费购买
+            <ul>
+              <li class="l3">单课购买 / 专栏购买（设备码绑定用户可跳过，直接看全课）</li>
+              <li class="l3">微信支付 + 支付宝（0.6%手续费，T+1结算）</li>
+              <li class="l3">课程优惠券 / 邀请码</li>
+              <li class="l3">订单管理 / 退款申请</li>
+              <li class="l3">发票申请（电子/纸质）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 六、AI智能问答（接口预留） -->
+      <li class="l1">
+        <span class="toggle">▼</span>六、AI智能问答
+        <span class="phase-tag phase-p5"></span>
+        <span class="badge badge-ai">Phase 5 仅预留接口</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>6.1 RAG知识库问答（技术方案预留）
+            <ul>
+              <li class="l3">用户提问 → 语义理解（智谱GLM-4）</li>
+              <li class="l3">→ 向量检索（QDrant）→ ANN检索 Top-5 chunks</li>
+              <li class="l3">→ 生成回答（智谱GLM-4）+ 引用来源</li>
+              <li class="l3">→ 展示回答 + 转人工兜底</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>6.2 知识库构建
+            <ul>
+              <li class="l3">PDF提取 → 语义分块（500字/chunk）→ embedding → QDrant</li>
+              <li class="l3">先做知识图谱再做RAG，持续优化Chunk策略</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>6.3 接口预留
+            <ul>
+              <li class="l3">GET /ai/chat — AI问答页面</li>
+              <li class="l3">POST /api/ai/ask — 提交问题，返回AI回答</li>
+              <li class="l3">GET /api/ai/history — 获取当前用户问答历史</li>
+              <li class="l3">GET/POST /api/ai/knowledge — 后台管理知识库内容</li>
+            </ul>
+          </li>
+          <li class="l2">6.4 免责声明模板（必须显示）
+            <ul>
+              <li class="l3" style="color:#c0392b;font-style:italic">"本回答仅供参考，不能替代专业医疗建议。如有具体诊疗需求，请咨询持牌兽医或医疗专业人员。"</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 七、个人中心 -->
+      <li class="l1">
+        <span class="toggle">▼</span>七、个人中心
+        <span class="phase-tag phase-p6"></span>
+        <ul>
+          <li class="l2">我的课程（进度%/最后观看/在学/已学分类）</li>
+          <li class="l2">收藏列表 / 下载管理（在线缓存，非离线）</li>
+          <li class="l2">设备管理（绑定/解绑申请/常用设备标记）</li>
+          <li class="l2">消息通知（邮件订阅/取消）</li>
+          <li class="l2">密码修改 / 通知设置 / 实名认证（兽医资格证上传）</li>
+        </ul>
+      </li>
+
+      <!-- 八、运营管理后台 -->
+      <li class="l1">
+        <span class="toggle">▼</span>八、运营管理后台
+        <span class="phase-tag phase-p1"></span>
+        <ul>
+          <li class="l2">8.1 用户管理 — 用户列表/筛选/导出/账户封禁/认证资料审核</li>
+          <li class="l2">8.2 课程管理 — 课程上架审批/UGC内容审核/敏感词过滤</li>
+          <li class="l2">8.3 设备码管理 — 设备码生成/批次管理/状态查询/解绑审核</li>
+          <li class="l2">8.4 AI知识库管理 — 知识库内容增删改/向量更新</li>
+          <li class="l2">8.5 数据看板 — DAU/MAU/学习时长/课程转化漏斗/收入报表/机构学习报告</li>
+          <li class="l2">8.6 系统配置 — Banner/弹窗/推送通知/权限角色管理</li>
+          <li class="l2">8.7 直播管理 — 监播控制/中断推流/回放审核</li>
+        </ul>
+      </li>
+
+      <!-- 九、SEO优化（网站特有） -->
+      <li class="l1">
+        <span class="toggle">▼</span>九、SEO优化
+        <span class="phase-tag phase-p7"></span>
+        <span class="badge badge-key">网站特有优势</span>
+        <ul>
+          <li class="l2">Next.js SSR — 每个课程页面独立URL，利于搜索引擎收录</li>
+          <li class="l2">课程TDK自定义（标题/描述/标签）</li>
+          <li class="l2">sitemap.xml 生成 → 提交百度/Google</li>
+          <li class="l2">OG标签 → 微信/QQ分享卡片</li>
+          <li class="l2">百度搜索资源平台 + Google Search Console 接入</li>
+          <li class="l2">LCP &lt; 2.5s 性能优化</li>
+        </ul>
+      </li>
+
+      <!-- 十、合规与安全 -->
+      <li class="l1">
+        <span class="toggle">▼</span>十、合规与安全
+        <span class="badge badge-risk">最高优先级贯穿始终</span>
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>10.1 医疗内容合规红线
+            <ul>
+              <li class="l3">❌ 直播出现患者隐私 → ✅ 全部打码或模拟设备教学</li>
+              <li class="l3">❌ AI给出诊断建议 → ✅ 加强免责，限制知识科普范围</li>
+              <li class="l3">❌ 未取得资质推广医疗器械 → ✅ 仅展示设备操作</li>
+              <li class="l3">❌ "治愈率"等绝对化表述 → ✅ 使用"研究显示""通常""可能"措辞</li>
+            </ul>
+          </li>
+          <li class="l2"><span class="toggle">▼</span>10.2 数据安全
+            <ul>
+              <li class="l3">全站HTTPS / 密码bcrypt哈希加盐 / 手机号AES-256加密</li>
+              <li class="l3">视频COS私有读+CDN鉴权+Referer限制</li>
+              <li class="l3">连续5次错误锁定30分钟 + 图形验证码 / 短信60秒防刷</li>
+              <li class="l3">Access Token 2小时 / Refresh Token 7天</li>
+              <li class="l3">Cloudflare WAF（防CC/SQL注入/XSS）</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 十一、第三方服务接入 -->
+      <li class="l1">
+        <span class="toggle">▼</span>十一、第三方服务接入
+        <ul>
+          <li class="l2"><span class="toggle">▼</span>腾讯云全家桶（统一账号，有折扣）
+            <ul>
+              <li class="l3">VOD（点播视频存储+转码）</li>
+              <li class="l3">CSS（直播推流服务）</li>
+              <li class="l3">COS（对象存储）</li>
+              <li class="l3">SMS（短信通知）</li>
+              <li class="l3">CVM（云服务器）</li>
+              <li class="l3">MySQL + Redis</li>
+            </ul>
+          </li>
+          <li class="l2">微信支付 / 支付宝（0.6%手续费，需企业资质）</li>
+          <li class="l2">Cloudflare（CDN + WAF + 免费SSL）</li>
+          <li class="l2">智谱 GLM-4 + QDrant（AI RAG方案）</li>
+          <li class="l2">Vercel（Next.js前端部署，免费）</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="legend">
+    <h3>📌 开发优先级与阶段规划</h3>
+    <ul>
+      <li><strong>P1（Phase 1-2）核心根基：</strong>登录注册 + 设备码体系 → 视频点播播放（必须先跑通这两个，其他都是空中楼阁）</li>
+      <li><strong>P2（Phase 3）体验加分：</strong>搜索/收藏功能</li>
+      <li><strong>P3（Phase 4）差异化：</strong>直播功能（公开直播先上，专业直播后上）</li>
+      <li><strong>P4（Phase 5）AI预留：</strong>仅预留接口，不实际接入（省¥2000-5000/月）</li>
+      <li><strong>P5（Phase 6-7）商业闭环：</strong>支付接入 + 个人中心 + SEO上线</li>
+    </ul>
+    <ul style="margin-top:10px">
+      <li><strong>总工期：</strong>4人团队并行 → 10周；单人开发 → 16周以上</li>
+      <li><strong>最低启动成本：</strong>云服务 ¥600-1000/月（不含人力），上线前准备 ¥5,000-20,000</li>
+      <li><strong>一句话结论：</strong>合规是最大变量，设备码是护城河，直播+AI是差异化竞争力</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    村口情报社 · 二狗出品 · 功能模块树状图 v2 · 2026年3月<br>
+    基于《可行性分析 PRD v2.0》生成
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.toggle').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var li = this.parentElement;
+      li.classList.toggle('collapsed');
+      this.textContent = li.classList.contains('collapsed') ? '▶' : '▼';
+    });
+  });
+</script>
+</body>
+</html>

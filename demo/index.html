@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小动物科研培训平台 — Demo</title>
+<style>
+/* ===== 基础reset ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1a3c6e;
+  --primary-light: #2a5ca8;
+  --accent: #e8a020;
+  --accent-hover: #d4921a;
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #5a6070;
+  --border: #e2e6ef;
+  --success: #27ae60;
+  --danger: #e74c3c;
+  --shadow: 0 2px 12px rgba(26,60,110,0.08);
+  --shadow-lg: 0 8px 30px rgba(26,60,110,0.12);
+  --radius: 10px;
+}
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif; color: var(--text); background: var(--bg); font-size: 15px; line-height: 1.6; }
+
+/* ===== 导航栏 ===== */
+.navbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-logo { font-size: 18px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 6px; }
+.nav-links button { background: none; border: none; padding: 8px 14px; border-radius: var(--radius); font-size: 14px; cursor: pointer; color: var(--text-secondary); transition: all 0.2s; }
+.nav-links button:hover { background: var(--bg); color: var(--primary); }
+.nav-links button.active { background: var(--primary); color: #fff; }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.btn { padding: 8px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-outline { background: none; border: 2px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm { padding: 5px 14px; font-size: 13px; }
+
+/* ===== 视图容器 ===== */
+#app { min-height: calc(100vh - 60px); }
+
+/* ===== 视图切换动画 ===== */
+.view { display: none; animation: fadeIn 0.3s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== 通用容器 ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== Hero 区域 ===== */
+.hero { background: linear-gradient(135deg, var(--primary) 0%, #0f2744 100%); color: #fff; padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+.hero-content { position: relative; z-index: 1; }
+.hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+.hero h1 span { color: var(--accent); }
+.hero p { font-size: 18px; color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto 32px; }
+.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 48px; justify-content: center; margin-top: 60px; }
+.stat { text-align: center; }
+.stat-n { font-size: 32px; font-weight: 800; color: var(--accent); }
+.stat-l { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+/* ===== 功能介绍 ===== */
+.features { padding: 60px 0; background: var(--surface); }
+.section-title { text-align: center; margin-bottom: 40px; }
+.section-title h2 { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.section-title p { color: var(--text-secondary); }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.feature-card { background: var(--bg); border-radius: var(--radius); padding: 28px 24px; border: 1px solid var(--border); transition: all 0.3s; }
+.feature-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.feature-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+.feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.feature-card p { font-size: 13px; color: var(--text-secondary); }
+
+/* ===== 课程卡片 ===== */
+.course-section { padding: 60px 0; }
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.course-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); transition: all 0.3s; cursor: pointer; }
+.course-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.course-thumb { position: relative; height: 160px; background: linear-gradient(135deg, var(--primary), #2a5ca8); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.course-thumb .play-btn { width: 52px; height: 52px; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s; }
+.course-thumb .play-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
+.course-tag { position: absolute; top: 10px; left: 10px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+.course-tag.free { background: var(--success); }
+.course-tag.locked { background: var(--text-secondary); }
+.course-info { padding: 16px; }
+.course-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.course-meta { display: flex; gap: 12px; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+.course-meta span { display: flex; align-items: center; gap: 4px; }
+.course-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+.price { font-size: 18px; font-weight: 800; color: var(--primary); }
+.price.free { color: var(--success); }
+.price small { font-size: 12px; font-weight: 400; color: var(--text-secondary); text-decoration: line-through; margin-left: 6px; }
+
+/* ===== 设备码绑定 ===== */
+.bind-section { padding: 60px 0; }
+.bind-container { max-width: 560px; margin: 0 auto; }
+.bind-box { background: var(--surface); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+.bind-box h2 { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 8px; text-align: center; }
+.bind-box .sub { text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.form-input { width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 15px; font-family: "Courier New", monospace; letter-spacing: 2px; text-transform: uppercase; transition: border-color 0.2s; outline: none; }
+.form-input:focus { border-color: var(--primary); }
+.form-input.error { border-color: var(--danger); }
+.form-input.success { border-color: var(--success); }
+.form-hint { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+.bind-result { margin-top: 20px; padding: 16px; border-radius: var(--radius); display: none; }
+.bind-result.show { display: block; animation: fadeIn 0.3s; }
+.bind-result.success { background: #eafaf1; border: 1px solid #a5d6a7; }
+.bind-result.error { background: #fdecea; border: 1px solid #ffcdd2; }
+.bind-result h4 { font-size: 15px; margin-bottom: 8px; }
+.bind-result p { font-size: 13px; color: var(--text-secondary); }
+.bind-result .unlocked-list { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.bind-result .unlocked-tag { background: var(--success); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+.bind-result .device-type { font-weight: 700; color: var(--primary); }
+.code-prefix-help { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.prefix-chip { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-family: "Courier New", monospace; cursor: pointer; transition: all 0.2s; }
+.prefix-chip:hover { border-color: var(--primary); background: #eef3fb; }
+.prefix-chip.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+/* ===== 设备管理 ===== */
+.devices-section { padding: 60px 0; }
+.devices-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.devices-header h2 { font-size: 24px; font-weight: 700; color: var(--primary); }
+.device-list { display: flex; flex-direction: column; gap: 12px; }
+.device-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow); }
+.device-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.device-icon.us { background: linear-gradient(135deg, #667eea, #764ba2); }
+.device-icon.ic { background: linear-gradient(135deg, #11998e, #38ef7d); }
+.device-icon.mx { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.device-info { flex: 1; }
+.device-info h3 { font-size: 15px; font-weight: 700; color: var(--text); }
+.device-info p { font-size: 12px; color: var(--text-secondary); font-family: "Courier New", monospace; }
+.device-perms { display: flex; gap: 6px; flex-wrap: wrap; }
+.perm-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+.perm-tag.active { background: #e8f5e9; color: var(--success); }
+.perm-tag.inactive { background: #f5f5f5; color: #bbb; }
+
+/* ===== 视频播放器 ===== */
+.player-section { padding: 60px 0; }
+.player-container { background: #000; border-radius: var(--radius); overflow: hidden; position: relative; aspect-ratio: 16/9; max-height: 540px; display: flex; align-items: center; justify-content: center; }
+.player-container video { width: 100%; height: 100%; object-fit: contain; }
+.player-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(26,60,110,0.9), rgba(15,39,68,0.95)); color: #fff; text-align: center; cursor: pointer; transition: all 0.3s; }
+.player-overlay:hover { background: linear-gradient(135deg, rgba(26,60,110,0.85), rgba(15,39,68,0.9)); }
+.player-overlay .big-play { width: 80px; height: 80px; background: rgba(255,255,255,0.15); border: 3px solid rgba(255,255,255,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 16px; backdrop-filter: blur(8px); transition: all 0.2s; }
+.player-overlay:hover .big-play { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+.player-overlay h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.player-overlay p { font-size: 14px; color: rgba(255,255,255,0.7); }
+.player-bar { background: var(--surface); border-radius: var(--radius); padding: 20px; margin-top: 16px; display: flex; align-items: center; gap: 16px; border: 1px solid var(--border); }
+.pb-progress { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.pb-progress-fill { height: 100%; background: var(--primary); border-radius: 3px; width: 0%; transition: width 0.3s; }
+.pb-time { font-size: 13px; color: var(--text-secondary); font-family: "Courier New", monospace; white-space: nowrap; }
+.player-chapters { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-top: 16px; overflow: hidden; }
+.chapter-item { padding: 14px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
+.chapter-item:last-child { border-bottom: none; }
+.chapter-item:hover { background: var(--bg); }
+.chapter-item.playing { background: #eef3fb; border-left: 3px solid var(--primary); }
+.chapter-n { width: 28px; height: 28px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); flex-shrink: 0; }
+.chapter-item.playing .chapter-n { background: var(--primary); color: #fff; }
+.chapter-title { flex: 1; font-size: 14px; }
+.chapter-dur { font-size: 12px; color: var(--text-secondary); }
+
+/* ===== 登录注册 ===== */
+.auth-section { padding: 60px 0; min-height: calc(100vh - 120px); display: flex; align-items: center; justify-content: center; }
+.auth-box { background: var(--surface); border-radius: var(--radius); padding: 40px; box-shadow: var(--shadow-lg); width: 100%; max-width: 420px; border: 1px solid var(--border); }
+.auth-box h2 { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 6px; text-align: center; }
+.auth-box .sub { text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+.auth-tabs { display: flex; background: var(--bg); border-radius: var(--radius); padding: 4px; margin-bottom: 24px; }
+.auth-tab { flex: 1; padding: 10px; text-align: center; border: none; background: none; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; color: var(--text-secondary); }
+.auth-tab.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow); }
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.auth-form input { width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 15px; outline: none; transition: border-color 0.2s; }
+.auth-form input:focus { border-color: var(--primary); }
+.auth-divider { text-align: center; color: var(--text-secondary); font-size: 13px; margin: 8px 0; }
+.auth-divider::before, .auth-divider::after { content: '──────────'; color: var(--border); }
+.device-code-input-wrap { position: relative; }
+.device-code-input-wrap input { padding-right: 100px; }
+
+/* ===== 用户状态栏 ===== */
+.user-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.user-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 16px; }
+.user-name { font-weight: 700; font-size: 15px; }
+.user-role { font-size: 12px; color: var(--text-secondary); }
+.user-codes { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.code-badge { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; font-family: "Courier New", monospace; font-weight: 700; color: var(--primary); }
+
+/* ===== 底部 ===== */
+.footer { background: var(--primary); color: rgba(255,255,255,0.6); padding: 32px 0; text-align: center; font-size: 13px; }
+.footer p { margin-bottom: 4px; }
+.footer strong { color: #fff; }
+
+/* ===== Toast ===== */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 12px 20px; border-radius: var(--radius); font-size: 14px; z-index: 9999; opacity: 0; transform: translateY(20px); transition: all 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* ===== Filter ===== */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.filter-btn { padding: 7px 16px; border: 2px solid var(--border); border-radius: 20px; background: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text-secondary); }
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 28px; }
+  .hero-stats { gap: 24px; }
+  .stat-n { font-size: 24px; }
+  .navbar { padding: 0 16px; }
+  .nav-links { display: none; }
+  .auth-box { margin: 0 16px; }
+}
+</style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="navigate('home')">🐾 科研培训<span>平台</span></div>
+  <div class="nav-links">
+    <button class="active" onclick="navigate('home')">首页</button>
+    <button onclick="navigate('courses')">课程中心</button>
+    <button onclick="navigate('player')">免费试听</button>
+    <button onclick="navigate('bind')">设备绑定</button>
+    <button onclick="navigate('devices')">我的设备</button>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-outline btn-sm" id="authBtn" onclick="navigate('auth')">登录 / 注册</button>
+  </div>
+</nav>
+
+<!-- 主视图容器 -->
+<div id="app">
+
+  <!-- ======= 首页 ======= -->
+  <div id="view-home" class="view active">
+    <div class="hero">
+      <div class="hero-content container">
+        <h1>小动物科研培训<span>平台</span></h1>
+        <p>面向兽医、实验动物科研人员的一站式在线学习平台。设备绑定即可解锁对应课程，支持视频点播、直播培训、AI智能问答。</p>
+        <div class="hero-btns">
+          <button class="btn btn-accent" onclick="navigate('courses')">浏览课程</button>
+          <button class="btn" style="background:rgba(255,255,255,0.15);color:#fff;border:2px solid rgba(255,255,255,0.4);" onclick="navigate('bind')">绑定设备码</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-n">200+</div><div class="stat-l">精品课程</div></div>
+          <div class="stat"><div class="stat-n">50+</div><div class="stat-l">授权专家</div></div>
+          <div class="stat"><div class="stat-n">5000+</div><div class="stat-l">注册学员</div></div>
+          <div class="stat"><div class="stat-n">98%</div><div class="stat-l">好评率</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>为什么选择我们</h2>
+          <p>专注小动物科研培训，解决实际问题</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔐</div>
+            <h3>设备码授权体系</h3>
+            <p>购买设备后凭设备码解锁对应课程，一个码只能绑定一个账号，杜绝共享。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎥</div>
+            <h3>高清视频点播</h3>
+            <p>1080p高清课程，支持倍速播放、断点续播、章节跳转、离线缓存。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <h3>直播培训</h3>
+            <p>专家在线直播答疑，支持弹幕互动、开播提醒、直播回放。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>AI智能问答</h3>
+            <p>基于专业语料库训练，7×24小时回答学习问题（Phase 5接入）。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏥</div>
+            <h3>专业内容</h3>
+            <p>课程由三甲医院影像科专家、实验动物中心资深讲师录制。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>多端学习</h3>
+            <p>支持电脑、手机、平板随时学习，学习进度自动同步。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 精选课程预览 -->
+    <div class="course-section" style="background: var(--bg);">
+      <div class="container">
+        <div class="section-title">
+          <h2>精选课程</h2>
+          <p>绑定设备码，解锁全部对应类型课程</p>
+        </div>
+        <div class="course-grid" id="featured-courses"></div>
+        <div style="text-align:center; margin-top:24px;">
+          <button class="btn btn-primary" onclick="navigate('courses')">查看全部课程 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设备码介绍 -->
+    <div class="features" style="background: var(--surface);">
+      <div class="container">
+        <div class="section-title">
+          <h2>设备码如何工作</h2>
+          <p>购买设备后，设备码是您解锁课程的唯一凭证</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>找到设备码</h3>
+            <p>设备码在设备说明书内，或联系经销商获取。格式：US-XXXX-YYYY 或 IC-XXXX-YYYY</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📲</div>
+            <h3>注册并绑定</h3>
+            <p>在平台上注册账号，进入"设备绑定"页面，输入设备码，一键绑定。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <h3>解锁全部课程</h3>
+            <p>绑定成功后，该设备类型对应的全部付费课程自动解锁，无二次收费。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 课程中心 ======= -->
+  <div id="view-courses" class="view">
+    <div class="course-section">
+      <div class="container">
+        <div class="section-title" style="text-align:left; margin-bottom:8px;">
+          <h2>课程中心</h2>
+          <p id="course-count"></p>
+        </div>
+        <div id="user-bar-container"></div>
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterCourses('all', this)">全部</button>
+          <button class="filter-btn" onclick="filterCourses('ultrasound', this)">超声影像</button>
+          <button class="filter-btn" onclick="filterCourses('smartcage', this)">智能笼</button>
+          <button class="filter-btn" onclick="filterCourses('free', this)">免费试听</button>
+        </div>
+        <div class="course-grid" id="course-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 设备绑定 ======= -->
+  <div id="view-bind" class="view">
+    <div class="bind-section">
+      <div class="container">
+        <div class="bind-container">
+          <div class="bind-box">
+            <h2>🔐 绑定设备码</h2>
+            <p class="sub">购买设备后，输入设备码解锁对应课程</p>
+            <div class="form-group">
+              <label>选择设备类型（选填，方便演示）</label>
+              <div class="code-prefix-help">
+                <span class="prefix-chip" onclick="fillPrefix('US', this)">US — 超声影像设备</span>
+                <span class="prefix-chip" onclick="fillPrefix('IC', this)">IC — 智能笼设备</span>
+                <span class="prefix-chip" onclick="fillPrefix('MX', this)">MX — 混合设备（双解锁）</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>设备码 *</label>
+              <input type="text" class="form-input" id="codeInput" placeholder="US-XXXX-XXXX" maxlength="15" oninput="onCodeInput()">
+              <p class="form-hint">格式：前缀-4位字母-4位数字，如 US-ABCD-1234</p>
+            </div>
+            <button class="btn btn-primary" style="width:100%;padding:14px;" onclick="submitBind()">立即绑定</button>
+            <div id="bindResult" class="bind-result"></div>
+          </div>
+          <div style="margin-top:20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
+            <h4 style="margin-bottom:10px;">📋 设备码类型说明</h4>
+            <table style="font-size:13px;">
+              <tr><td style="font-weight:700;color:var(--primary);padding-right:16px;">US-前缀</td><td>超声影像设备 → 解锁全部超声类课程</td></tr>
+              <tr><td style="font-weight:700;color:#27ae60;padding-right:16px;">IC-前缀</td><td>智能笼设备 → 解锁全部智能笼类课程</td></tr>
+              <tr><td style="font-weight:700;color:#9b59b6;padding-right:16px;">MX-前缀</td><td>混合设备 → 同时解锁超声+智能笼全部课程</td></tr>
+            </table>
+            <p style="font-size:12px;color:var(--text-secondary);margin-top:10px;">⚠️ 设备码只能绑定一个账号，每个账号可绑定最多3个设备码</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 我的设备 ======= -->
+  <div id="view-devices" class="view">
+    <div class="devices-section">
+      <div class="container">
+        <div id="user-bar-container2"></div>
+        <div class="devices-header">
+          <h2>📱 我的设备</h2>
+          <button class="btn btn-accent btn-sm" onclick="navigate('bind')">+ 绑定新设备</button>
+        </div>
+        <div id="deviceList"></div>
+        <div id="noDevices" style="text-align:center;padding:60px 0;color:var(--text-secondary);">
+          <div style="font-size:48px;margin-bottom:16px;">📦</div>
+          <p style="font-size:16px;font-weight:600;margin-bottom:8px;">还没有绑定任何设备</p>
+          <p style="font-size:13px;">购买设备后，凭设备码在此绑定，即可解锁对应课程</p>
+          <button class="btn btn-primary" style="margin-top:20px;" onclick="navigate('bind')">去绑定设备码</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 视频播放器 ======= -->
+  <div id="view-player" class="view">
+    <div class="player-section">
+      <div class="container">
+        <div id="        <div id="user-bar-container3"></div>
+        <div class="player-container" id="playerContainer">
+          <video id="mainVideo" style="display:none;" ontimeupdate="onTimeUpdate()"></video>
+          <div class="player-overlay" id="playerOverlay" onclick="togglePlay()">
+            <div class="big-play">▶</div>
+            <h3 id="playerTitle">小鼠影像学检查技术</h3>
+            <p id="playerSub">免费试听 · 时长 12:34</p>
+          </div>
+        </div>
+        <div class="player-bar" id="playerBar" style="display:none;">
+          <div class="pb-progress"><div class="pb-progress-fill" id="pbFill"></div></div>
+          <span class="pb-time" id="pbTime">00:00 / 12:34</span>
+        </div>
+        <div class="player-chapters" id="chapters">
+          <div class="chapter-item playing" onclick="selectChapter(0)">
+            <div class="chapter-n">1</div>
+            <div class="chapter-title">第一章：实验小鼠概述与分类</div>
+            <div class="chapter-dur">12:34</div>
+          </div>
+          <div class="chapter-item" onclick="selectChapter(1)">
+            <div class="chapter-n">2</div>
+            <div class="chapter-title">第二章：影像学检查基础原理</div>
+            <div class="chapter-dur">18:22</div>
+          </div>
+          <div class="chapter-item" onclick="selectChapter(2)">
+            <div class="chapter-n">3</div>
+            <div class="chapter-title">第三章：超声设备操作演示</div>
+            <div class="chapter-dur">24:15</div>
+          </div>
+          <div class="chapter-item" onclick="selectChapter(3)">
+            <div class="chapter-n">4</div>
+            <div class="chapter-title">第四章：实拍案例分析</div>
+            <div class="chapter-dur">31:08</div>
+          </div>
+          <div class="chapter-item" onclick="selectChapter(4)">
+            <div class="chapter-n">5</div>
+            <div class="chapter-title">第五章：常见问题与解决方案</div>
+            <div class="chapter-dur">15:47</div>
+          </div>
+        </div>
+        <div id="playerAccessDenied" style="display:none; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:40px; text-align:center; margin-top:20px;">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <h3 style="font-size:18px;margin-bottom:8px;">此课程为付费内容</h3>
+          <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">绑定对应设备码后可解锁全部章节</p>
+          <button class="btn btn-primary" onclick="navigate('bind')">去绑定设备码</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= 登录注册 ======= -->
+  <div id="view-auth" class="view">
+    <div class="auth-section">
+      <div class="auth-box">
+        <h2 id="authTitle">欢迎回来</h2>
+        <p class="sub" id="authSub">登录后享受完整学习体验</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">登录</button>
+          <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">注册</button>
+        </div>
+        <form class="auth-form" onsubmit="return handleAuth(event)">
+          <input type="text" id="authName" placeholder="请输入姓名" style="display:none;">
+          <input type="text" id="authPhone" placeholder="手机号">
+          <input type="password" id="authPwd" placeholder="密码">
+          <div id="deviceCodeField" style="display:none; position:relative;">
+            <input type="text" id="authCode" placeholder="设备码（选填，已绑定设备码可自动解锁课程）" style="padding-right:16px;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;" id="authSubmitBtn">登录</button>
+        </form>
+        <p class="auth-divider">其他登录方式</p>
+        <button class="btn btn-outline" style="width:100%;" onclick="wechatLogin()">微信登录（暂未开放）</button>
+        <p style="font-size:12px;color:var(--text-secondary);text-align:center;margin-top:14px;">演示说明：任意手机号+密码即可登录，设备码可选填</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast 提示 -->
+<div class="toast" id="toast"></div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>© 2026 小动物科研培训平台 · 村口情报社出品</p>
+  <p>Powered by 腾讯云 VOD · CDN · AI 智谱 GLM-4</p>
+</div>
+
+<script>
+// ==================== 数据 ====================
+const COURSES = [
+  { id: 'c01', title: '小鼠影像学检查技术：从入门到精通', type: 'ultrasound', teacher: '张明远 主任医师', lessons: 42, hours: '12.5h', thumb: '🔬', free: true, locked: false, desc: '小鼠超声影像基础理论+实操演示' },
+  { id: 'c02', title: '实验动物麻醉与镇痛管理', type: 'smartcage', teacher: '李芳 实验动物中心', lessons: 28, hours: '8.2h', thumb: '💉', free: true, locked: false, desc: '规范化麻醉流程与疼痛评估' },
+  { id: 'c03', title: '智能笼系统操作与数据解读', type: 'smartcage', teacher: '王海 工程师', lessons: 18, hours: '5.5h', thumb: '🏠', free: false, locked: true, desc: '从安装到数据导出的全流程指南' },
+  { id: 'c04', title: '超声弹性成像在肝脏纤维化评估中的应用', type: 'ultrasound', teacher: '赵东升 主治医师', lessons: 36, hours: '10.8h', thumb: '🫀', free: false, locked: true, desc: '前沿影像技术在科研中的应用' },
+  { id: 'c05', title: '小动物CT/MRI影像学高级教程', type: 'ultrasound', teacher: '孙丽 影像科主任', lessons: 52, hours: '16.0h', thumb: '🧠', free: false, locked: true, desc: 'CT/MRI成像原理与临床读片' },
+  { id: 'c06', title: '智能笼实时监测系统搭建', type: 'smartcage', teacher: '王海 工程师', lessons: 24, hours: '7.0h', thumb: '📊', free: false, locked: true, desc: '传感器配置+数据上传+异常预警' },
+  { id: 'c07', title: '超声造影技术（CEUS）实验方法', type: 'ultrasound', teacher: '张明远 主任医师', lessons: 20, hours: '6.2h', thumb: '🩺', free: false, locked: true, desc: '造影剂配制与成像操作规范' },
+  { id: 'c08', title: '实验动物福利伦理与规范', type: 'free', teacher: '陈蓉 伦理委员会', lessons: 15, hours: '4.5h', thumb: '⚖️', free: true, locked: false, desc: 'GLP规范与动物福利要求（免费）' },
+  { id: 'c09', title: '智能笼温湿度与气体监测数据分析', type: 'smartcage', teacher: '李芳 实验动物中心', lessons: 30, hours: '9.0h', thumb: '🌡️', free: false, locked: true, desc: '环境数据挖掘与异常检测' },
+];
+
+const DEVICE_TYPES = {
+  US: { label: '超声影像设备', color: '#667eea', courses: ['c01','c04','c05','c07'] },
+  IC: { label: '智能笼设备', color: '#11998e', courses: ['c02','c03','c06','c09'] },
+  MX: { label: '混合设备', color: '#f093fb', courses: ['c01','c02','c03','c04','c05','c06','c07','c09'] },
+};
+
+// ==================== 状态 ====================
+let currentUser = null;
+let userDevices = [];
+let currentFilter = 'all';
+let isPlaying = false;
+
+// ==================== 导航 ====================
+function navigate(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.nav-links button');
+  if (view === 'home') navBtns[0].classList.add('active');
+  if (view === 'courses') navBtns[1].classList.add('active');
+  if (view === 'player') navBtns[2].classList.add('active');
+  if (view === 'bind') navBtns[3].classList.add('active');
+  if (view === 'devices') navBtns[4].classList.add('active');
+
+  // 更新Auth按钮
+  const authBtn = document.getElementById('authBtn');
+  if (currentUser) {
+    authBtn.textContent = currentUser.name;
+    authBtn.onclick = showUserMenu;
+  } else {
+    authBtn.textContent = '登录 / 注册';
+    authBtn.onclick = () => navigate('auth');
+  }
+
+  if (view === 'courses') renderCourses();
+  if (view === 'bind') resetBindForm();
+  if (view === 'devices') renderDevices();
+  if (view === 'player') renderPlayer();
+  if (view === 'home') renderFeatured();
+  window.scrollTo(0, 0);
+}
+
+function showUserMenu() {
+  const ok = confirm('确定要退出登录吗？');
+  if (ok) { currentUser = null; userDevices = []; navigate('home'); toast('已退出登录', 'info'); }
+}
+
+// ==================== Toast ====================
+function toast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ==================== 课程渲染 ====================
+function canAccess(course) {
+  if (!course.locked) return true;
+  if (!currentUser || userDevices.length === 0) return false;
+  const allCodes = userDevices.map(d => d.type);
+  if (allCodes.includes('MX')) return true;
+  return allCodes.includes(course.type === 'ultrasound' ? 'US' : 'IC');
+}
+
+function renderUserBar() {
+  const html = currentUser ? `
+    <div class="user-bar">
+      <div class="user-avatar">${currentUser.name[0]}</div>
+      <div>
+        <div class="user-name">${currentUser.name}</div>
+        <div class="user-role">${userDevices.length > 0 ? '已绑定 ' + userDevices.length + ' 台设备' : '游客（可浏览免费内容）'}</div>
+      </div>
+      ${userDevices.length > 0 ? `<div class="user-codes">${userDevices.map(d => `<span class="code-badge">${d.code}</span>`).join('')}</div>` : ''}
+    </div>` : '';
+  ['user-bar-container','user-bar-container2','user-bar-container3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+}
+
+function makeCourseCard(c) {
+  const accessible = canAccess(c);
+  const lockIcon = c.locked && !accessible ? ' 🔒' : '';
+  const tagClass = c.free ? 'free' : (c.locked && !accessible ? 'locked' : '');
+  const tagText = c.free ? '免费' : (c.locked && !accessible ? '付费' : '已解锁');
+  const priceHtml = c.free ? '<span class="price free">免费<span style="font-size:12px;font-weight:400;color:#aaa;margin-left:4px;text-decoration:none;"> · 已开放</span></span>' : (accessible ? '<span class="price free">已解锁</span>' : `<span class="price">¥${(Math.random()*200+200).toFixed(0)}<small>¥${(Math.random()*100+300).toFixed(0)}</small></span>`);
+  return `
+    <div class="course-card" onclick="onCourseClick('${c.id}')">
+      <div class="course-thumb">
+        <div style="font-size:56px;">${c.thumb}</div>
+        ${tagClass ? `<span class="course-tag ${tagClass}">${tagText}</span>` : ''}
+        <div class="play-btn" onclick="event.stopPropagation(); playCourse('${c.id}')">▶</div>
+      </div>
+      <div class="course-info">
+        <h3>${c.title}${lockIcon}</h3>
+        <div class="course-meta">
+          <span>👤 ${c.teacher}</span>
+        </div>
+        <div class="course-meta">
+          <span>📚 ${c.lessons}节</span>
+          <span>⏱ ${c.hours}</span>
+        </div>
+        <div class="course-footer">
+          ${priceHtml}
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); onCourseClick('${c.id}')">${accessible ? '开始学习' : '了解详情'}</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderCourses() {
+  renderUserBar();
+  let filtered = COURSES;
+  if (currentFilter === 'ultrasound') filtered = COURSES.filter(c => c.type === 'ultrasound');
+  else if (currentFilter === 'smartcage') filtered = COURSES.filter(c => c.type === 'smartcage');
+  else if (currentFilter === 'free') filtered = COURSES.filter(c => c.free);
+
+  document.getElementById('course-count').textContent = `共 ${filtered.length} 门课程${currentUser ? ' · 已登录' : ' · 请登录后查看付费内容'}`;
+  document.getElementById('course-list').innerHTML = filtered.map(makeCourseCard).join('');
+  document.getElementById('featured-courses').innerHTML = COURSES.slice(0, 4).map(makeCourseCard).join('');
+}
+
+function renderFeatured() {
+  document.getElementById('featured-courses').innerHTML = COURSES.slice(0, 4).map(makeCourseCard).join('');
+}
+
+function filterCourses(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCourses();
+}
+
+function onCourseClick(id) {
+  const c = COURSES.find(x => x.id === id);
+  if (!c) return;
+  if (c.locked && !canAccess(c)) {
+    toast('此课程需要绑定对应设备码才能学习', 'error');
+    navigate('bind');
+  } else {
+    navigate('player');
+  }
+}
+
+function playCourse(id) {
+  const c = COURSES.find(x => x.id === id);
+  if (c && c.locked && !canAccess(c)) {
+    toast('请先绑定设备码', 'error');
+    navigate('bind');
+  } else {
+    navigate('player');
+  }
+}
+
+// ==================== 设备码绑定 ====================
+function resetBindForm() {
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeInput').className = 'form-input';
+  document.getElementById('bindResult').className = 'bind-result';
+  document.querySelectorAll('.prefix-chip').forEach(c => c.classList.remove('active'));
+}
+
+function fillPrefix(prefix, el) {
+  const input = document.getElementById('codeInput');
+  input.value = prefix + '-';
+  input.focus();
+  document.querySelectorAll('.prefix-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function onCodeInput() {
+  const input = document.getElementById('codeInput');
+  input.value = input.value.toUpperCase();
+  input.className = 'form-input';
+}
+
+function validateCode(code) {
+  if (!code) return { valid: false, type: null, msg: '请输入设备码' };
+  const parts = code.split('-');
+  if (parts.length !== 3 || parts[0].length !== 2 || parts[1].length !== 4 || parts[2].length !== 4) {
+    return { valid: false, type: null, msg: '格式错误，正确的是：前缀-4位字母-4位数字，如 US-ABCD-1234' };
+  }
+  const prefix = parts[0];
+  if (!['US','IC','MX'].includes(prefix)) {
+    return { valid: false, type: null, msg: '设备码前缀无效，仅支持 US / IC / MX' };
+  }
+  return { valid: true, type: prefix, msg: '验证通过' };
+}
+
+function submitBind() {
+  if (!currentUser) {
+    toast('请先登录再绑定设备码', 'error');
+    navigate('auth');
+    return;
+  }
+  const code = document.getElementById('codeInput').value.trim();
+  const result = validateCode(code);
+  const input = document.getElementById('codeInput');
+  const resultDiv = document.getElementById('bindResult');
+
+  if (!result.valid) {
+    input.className = 'form-input error';
+    resultDiv.className = 'bind-result show error';
+    resultDiv.innerHTML = `<h4 style="color:var(--danger);">❌ 绑定失败</h4><p>${result.msg}</p>`;
+    return;
+  }
+
+  // 模拟绑定
+  input.className = 'form-input success';
+  const dt = DEVICE_TYPES[result.type];
+  userDevices.push({ code, type: result.type, label: dt.label });
+  const unlockedCourses = dt.courses.map(cid => COURSES.find(c => c.id === cid)).filter(Boolean).map(c => c.title);
+  resultDiv.className = 'bind-result show success';
+  resultDiv.innerHTML = `
+    <h4 style="color:var(--success);">✅ 绑定成功！</h4>
+    <p>设备类型：<span class="device-type">${dt.label}</span>（${result.type}前缀）</p>
+    <p>设备码：<code style="font-family:monospace;font-weight:700;">${code}</code></p>
+    <p style="margin-top:8px;">已解锁课程（${unlockedCourses.length}门）：</p>
+    <div class="unlocked-list">${unlockedCourses.map(t => `<span class="unlocked-tag">${t}</span>`).join('')}</div>
+    <p style="margin-top:10px;font-size:12px;color:var(--text-secondary);">每个账号最多绑定3台设备，设备码与账号绑定后不可转移。</p>`;
+  toast('设备绑定成功！', 'success');
+  renderUserBar();
+}
+
+function renderDevices() {
+  renderUserBar();
+  if (userDevices.length === 0) {
+    document.getElementById('deviceList').innerHTML = '';
+    document.getElementById('noDevices').style.display = 'block';
+    return;
+  }
+  document.getElementById('noDevices').style.display = 'none';
+  document.getElementById('deviceList').innerHTML = userDevices.map(d => {
+    const dt = DEVICE_TYPES[d.type];
+    const allCages = ['c01','c04','c05','c07']; // US
+    const allSmart = ['c02','c03','c06','c09']; // IC
+    const courses = d.type === 'US' ? allCages : d.type === 'IC' ? allSmart : [...allCages,...allSmart];
+    const hasU = courses.some(id => COURSES.find(c => c.id === id));
+    return `
+      <div class="device-item">
+        <div class="device-icon ${d.type.toLowerCase()}">${d.type === 'US' ? '🔬' : d.type === 'IC' ? '🏠' : '🔗'}</div>
+        <div class="device-info">
+          <h3>${dt.label}</h3>
+          <p>${d.code} · 绑定成功</p>
+        </div>
+        <div class="device-perms">
+          <span class="perm-tag ${d.type === 'US' || d.type === 'MX' ? 'active' : 'inactive'}">超声课程</span>
+          <span class="perm-tag ${d.type === 'IC' || d.type === 'MX' ? 'active' : 'inactive'}">智能笼课程</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ==================== 播放器 ====================
+let currentChapter = 0;
+const CHAPTERS = [
+  { title: '第一章：实验小鼠概述与分类', dur: '12:34', secs: 754 },
+  { title: '第二章：影像学检查基础原理', dur: '18:22', secs: 1102 },
+  { title: '第三章：超声设备操作演示', dur: '24:15', secs: 1455 },
+  { title: '第四章：实拍案例分析', dur: '31:08', secs: 1868 },
+  { title: '第五章：常见问题与解决方案', dur: '15:47', secs: 947 },
+];
+
+function renderPlayer() {
+  renderUserBar();
+  const hasAccess = canAccess(COURSES[0]);
+  document.getElementById('playerOverlay').style.display = hasAccess ? 'flex' : 'none';
+  document.getElementById('playerBar').style.display = isPlaying ? 'flex' : 'none';
+  document.getElementById('playerAccessDenied').style.display = hasAccess ? 'none' : 'block';
+  document.getElementById('chapters').style.display = hasAccess ? 'block' : 'none';
+  updateChapterHighlight();
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  const overlay = document.getElementById('playerOverlay');
+  const bar = document.getElementById('playerBar');
+  if (isPlaying) {
+    overlay.style.display = 'none';
+    bar.style.display = 'flex';
+    toast('▶ 正在播放（演示模式，无真实视频源）', 'info');
+    simulateProgress();
+  } else {
+    overlay.style.display = 'flex';
+    bar.style.display = 'none';
+  }
+}
+
+let progressInterval = null;
+function simulateProgress() {
+  clearInterval(progressInterval);
+  let pct = 0;
+  progressInterval = setInterval(() => {
+    if (!isPlaying) { clearInterval(progressInterval); return; }
+    pct += 0.5;
+    if (pct > 100) { pct = 0; }
+    document.getElementById('pbFill').style.width = pct + '%';
+    const totalSecs = CHAPTERS[currentChapter].secs;
+    const curSecs = Math.floor(totalSecs * pct / 100);
+    const mm = String(Math.floor(curSecs/60)).padStart(2,'0');
+    const ss = String(curSecs%60).padStart(2,'0');
+    document.getElementById('pbTime').textContent = mm + ':' + ss + ' / ' + CHAPTERS[currentChapter].dur;
+  }, 300);
+}
+
+function onTimeUpdate() {}
+
+function selectChapter(idx) {
+  currentChapter = idx;
+  isPlaying = false;
+  renderPlayer();
+  setTimeout(() => togglePlay(), 100);
+}
+
+function updateChapterHighlight() {
+  document.querySelectorAll('.chapter-item').forEach((el, i) => {
+    el.classList.toggle('playing', i === currentChapter);
+  });
+  document.getElementById('playerTitle').textContent = CHAPTERS[currentChapter].title;
+  document.getElementById('playerSub').textContent = '第' + (currentChapter+1) + '章 · ' + CHAPTERS[currentChapter].dur;
+}
+
+// ==================== 登录注册 ====================
+function switchAuthTab(tab) {
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('authTitle').textContent = tab === 'login' ? '欢迎回来' : '创建账号';
+  document.getElementById('authSub').textContent = tab === 'login' ? '登录后享受完整学习体验' : '注册即表示同意《用户协议》和《隐私政策》';
+  document.getElementById('authSubmitBtn').textContent = tab === 'login' ? '登录' : '注册';
+  document.getElementById('authName').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('deviceCodeField').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+function handleAuth(e) {
+  e.preventDefault();
+  const phone = document.getElementById('authPhone').value.trim();
+  const pwd = document.getElementById('authPwd').value;
+  const name = document.getElementById('authName').value.trim() || '用户' + Math.floor(Math.random()*9000+1000);
+  const authCode = document.getElementById('authCode').value.trim().toUpperCase();
+
+  if (!phone || !pwd) { toast('请填写手机号和密码', 'error'); return false; }
+  if (pwd.length < 6) { toast('密码至少6位', 'error'); return false; }
+
+  // 模拟登录
+  currentUser = { name, phone };
+  if (authCode && validateCode(authCode).valid) {
+    const type = validateCode(authCode).type;
+    userDevices.push({ code: authCode, type, label: DEVICE_TYPES[type].label });
+  }
+  toast('登录成功！', 'success');
+  navigate('courses');
+  return false;
+}
+
+function wechatLogin() {
+  toast('微信登录暂未开放，请使用手机号注册', 'error');
+}
+
+// ==================== 初始化 ====================
+document.addEventListener('DOMContentLoaded', () => {
+  renderFeatured();
+  // 默认显示首页
+});
+</script>
+</body>
+</html>
